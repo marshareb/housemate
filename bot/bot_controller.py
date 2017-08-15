@@ -52,7 +52,7 @@ class BotController:
     elif used_any(BotController.GREETING_WORDS):
       msg_to_send['text'] = 'Greetings to you, as well, {}!'.format(recd_msg['author'])
     elif used_any(BotController.HELP_WORDS):
-      msg_to_send['text'] = ('Hi! I\'m the friendly house mate, the friendly chatbot.  I don\'t do much right now,' +
+      msg_to_send['text'] = ('Hi! I\'m the friendly house mate, the chatbot.  I don\'t do much right now,' +
                              ' but I will help remind you who has to do what chore. I\'m still restricted to three chores.')
     elif used_any(BotController.CHORES_WORDS):
         msg_to_send['text'] = ('James: Your chore is ' + BotController.chores[0] +
