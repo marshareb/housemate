@@ -30,8 +30,12 @@ class BotController:
     return text.lower()
 
   def process_message(self, recd_msg):
+    today_date = str(date.today())
+    if get_date_difference(BotController.last_date, today_date) != 0:
+        for i in range(get_date_difference):
+            BotController.chores = cycle(BotController.chores)
     msg_to_send = {} # reply
-    
+
     # Preprocessing
     text = recd_msg['text'].lower()
 
@@ -48,8 +52,8 @@ class BotController:
     elif used_any(BotController.GREETING_WORDS):
       msg_to_send['text'] = 'Greetings to you, as well, {}!'.format(recd_msg['author'])
     elif used_any(BotController.HELP_WORDS):
-      msg_to_send['text'] = ('Hi! I\'m Housemate, the friendly chatbot.  I don\'t do much right now,' +
-                             ' but I will help remind you who has to do what chore.')
+      msg_to_send['text'] = ('Hi! I\'m the friendly house mate, the friendly chatbot.  I don\'t do much right now,' +
+                             ' but I will help remind you who has to do what chore. I\'m still restricted to three chores.')
     elif used_any(BotController.CHORES_WORDS):
         msg_to_send['text'] = ('James: Your chore is ' + BotController.chores[0] +
                                '. Chase: Your chore is ' + BotController.chores[1] +
