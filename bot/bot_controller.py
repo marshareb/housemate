@@ -52,9 +52,9 @@ class BotController:
                              ' but I will help remind you who has to do what chore.')
     elif used_any(BotController.CHORES_WORDS):
         msg_to_send['text'] = ('James: Your chore is ' + BotController.chores[0] +
-                               ' Chase: Your chore is ' + BotController.chores[1] +
-                               ' Mike: Your chore is ' + BotController.chores[2] +
-                               ' Make sure to update me to have accurate chores.')
+                               '. Chase: Your chore is ' + BotController.chores[1] +
+                               '. Mike: Your chore is ' + BotController.chores[2] +
+                               '. Make sure to update me to have accurate chores.')
     else:
       msg_to_send['text'] = 'I can\'t tell what you\'re talking about.'
 
