@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6d58cf3d-c0fc-4793-a487-ab73fd95a7b9" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bot/bot_controller.py" afterPath="$PROJECT_DIR$/bot/bot_controller.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -54,9 +55,11 @@
       <file leaf-file-name="bot_controller.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/bot/bot_controller.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="252">
-              <caret line="50" column="138" lean-forward="false" selection-start-line="50" selection-start-column="138" selection-end-line="50" selection-end-column="138" />
-              <folding />
+            <state relative-caret-position="448">
+              <caret line="73" column="62" lean-forward="false" selection-start-line="73" selection-start-column="62" selection-end-line="73" selection-end-column="62" />
+              <folding>
+                <element signature="e#0#25#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -348,9 +351,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/bot/bot_controller.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="50" column="138" lean-forward="false" selection-start-line="50" selection-start-column="138" selection-end-line="50" selection-end-column="138" />
-          <folding />
+        <state relative-caret-position="448">
+          <caret line="73" column="62" lean-forward="false" selection-start-line="73" selection-start-column="62" selection-end-line="73" selection-end-column="62" />
+          <folding>
+            <element signature="e#0#25#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

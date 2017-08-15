@@ -1,4 +1,5 @@
 from datetime import date
+import random
 
 def get_date_difference(date1, date2):
     date_1 = list(map(lambda x: int(x), date1.split("-")))
@@ -15,10 +16,18 @@ class BotController:
   chores = ['Dishes', 'Trash', 'Sweeping']
   last_date = "2017-08-15"
 
+  JOKES = ['What’s the difference between a G-spot and a golf ball? A guy will actually search for a golf ball.',
+           'Why was the guitar teacher arrested? For fingering a minor.',
+           'Why does Santa Claus have such a big sack? He only comes once a year.']
+  SONG = ['https://www.youtube.com/watch?v=y6120QOlsfU',
+          'https://www.youtube.com/watch?v=L_jWHffIx5E',
+          'https://www.youtube.com/watch?v=dQw4w9WgXcQ']
   UPDATE_WORDS       = ['update']
-  GREETING_WORDS = ['hello', 'hi', 'what\'s up'] 
+  GREETING_WORDS = ['hello', 'hi', 'what\'s up']
+  JOKE_WORDS = ['joke']
   HELP_WORDS     = ['help', 'you do?']
   CHORES_WORDS = ['chores', 'do']
+  SONG_WORDS = ['music', 'sing']
 
   # Field List:
   #  (none)
@@ -59,6 +68,10 @@ class BotController:
                                '. Chase: Your chore is ' + BotController.chores[1] +
                                '. Mike: Your chore is ' + BotController.chores[2] +
                                '. Make sure to update me to have accurate chores.')
+    elif used_any(BotController.JOKE_WORDS):
+        msg_to_send['text'] = random.choice(BotController.JOKES)
+    elif used_any(BotController.SONG_WORDS):
+        msg_to_send['text'] = random.choice(BotController.SONG)
     else:
       msg_to_send['text'] = 'I can\'t tell what you\'re talking about.'
 
