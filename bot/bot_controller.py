@@ -48,7 +48,7 @@ class BotController:
       if get_date_difference(BotController.last_date, today_date) != 0:
         for i in range(get_date_difference):
             BotController.chores = cycle(BotController.chores)
-      msg_to_send['text'] = 'I\'ve updated!'
+      msg_to_send['text'] = 'I\'ve updated! Last date updated: ' + str(BotController.last_date) + ', current date: ' + str(today_date) +'.'
     elif used_any(BotController.GREETING_WORDS):
       msg_to_send['text'] = 'Greetings to you, as well, {}!'.format(recd_msg['author'])
     elif used_any(BotController.HELP_WORDS):
