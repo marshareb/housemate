@@ -1,41 +1,31 @@
+from datetime import date
+
+def get_date_difference(date1, date2):
+    date_1 = list(map(lambda x: int(x), date1.split("-")))
+    date_1 = date(date_1[0], date_1[1], date_1[2])
+    date_2 = list(map(lambda x: int(x), date2.split("-")))
+    date_2 = date(date_2[0], date_2[1], date_2[2])
+    return int(abs(date_1-date_2).days)
+
+def cycle(lis):
+    return lis[1:] + [lis[0]]
 
 class BotController:
   # Static Members
-  office_hours = {
-      'Andrew'     : 'Thu 6-8',
-      'Atallah'    : 'Wed 6-8, Wed 8-10',
-      'Ben'        : 'Mon 6-8',
-      'Divya'      : 'Mon 8-10',
-      'Glenna'     : 'Thu 6-8, Thu 8-10',
-      'Jake'       : 'Sun 4-6',
-      'Jay'        : 'Wed 8-10',
-      'Jessica'    : 'Mon 8-10',
-      'John'       : 'Wed 8-10',
-      'Joo Wan'    : 'Mon 8-10',
-      'Leila'      : 'Mon 6-8, Wed 6-8',
-      'Leon'       : 'Mon 6-8',
-      'Marina'     : 'Thu 8-10',
-      'Michelle'   : 'Sun 4-6, Wed 6-8',
-      'Rachel'     : 'Thu 6-8',
-      'Ryan'       : 'Mon 8-10, Thu 8-10',
-      'Salah'      : 'Sun 6-8',
-      'Sam'        : 'Thu 6-8',
-      'Tahiya'     : 'Thu 8-10',
-      'Xhama'      : 'Sun 6-8, Mon 6-8',
-      'Bloomfield' : 'at an unknown time',
-      'Floryan'    : 'at an unknown time',
-    }
+  chores = ['Dishes', 'Trash', 'Sweeping']
+  last_date = "2017-08-15"
 
-  OH_WORDS       = ['office hours', 'oh']
+  UPDATE_WORDS       = ['update']
   GREETING_WORDS = ['hello', 'hi', 'what\'s up'] 
   HELP_WORDS     = ['help', 'you do?']
+  CHORES_WORDS = ['chores', 'do']
 
   # Field List:
   #  (none)
 
   def __init__(self):
     pass
-  
+
   def text_preprocessing(self, text):
     return text.lower()
 
@@ -49,15 +39,22 @@ class BotController:
     used_any = lambda word_list: any(map(lambda x : x in text, word_list))
 
     # Use some hard-coded rules to decide what this message says
-    if 'when' in text and used_any(BotController.OH_WORDS):
-      msg_to_send['text'] = 'You\'re asking about someone\'s office hours!'
+    if used_any(BotController.UPDATE_WORDS):
+      today_date = str(date.today())
+      if get_date_difference(BotController.last_date, today_date) != 0:
+        for i in range(get_date_difference):
+            BotController.chores = cycle(BotController.chores)
+      msg_to_send['text'] = 'I\'ve updated!'
     elif used_any(BotController.GREETING_WORDS):
       msg_to_send['text'] = 'Greetings to you, as well, {}!'.format(recd_msg['author'])
     elif used_any(BotController.HELP_WORDS):
-      msg_to_send['text'] = ('Hi! I\'m Bloombot, the 2150 TA chatbot.  I don\'t do much right now,' +
-                             ' but I will help remind you when timesheets are due, answer questions' + 
-                             ' about whose office hours are when, and possibly do other things. \n' +
-                             'I\'m open-source; check Andrew\'s github to suggest or add features.')
+      msg_to_send['text'] = ('Hi! I\'m Housemate, the friendly chatbot.  I don\'t do much right now,' +
+                             ' but I will help remind you who has to do what chore.')
+    elif used_any(BotController.CHORES_WORDS):
+        msg_to_send['text'] = ('James: Your chore is ' + BotController.chores[0] +
+                               ' Chase: Your chore is ' + BotController.chores[1] +
+                               ' Mike: Your chore is ' + BotController.chores[2] +
+                               ' Make sure to update me to have accurate chores.')
     else:
       msg_to_send['text'] = 'I can\'t tell what you\'re talking about.'
 

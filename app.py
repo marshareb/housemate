@@ -18,7 +18,7 @@ def webhook():
   data = request.get_json()
 
   # We don't want to reply to ourselves, and must mention us!
-  if data['name'] != 'Bloombot' and 'bloombot' in data['text'].lower():
+  if data['name'] != 'Housemat' and 'housemate' in data['text'].lower():
     msg = {}
     msg['author']    = data['name']
     msg['author_id'] = data['sender_id']
@@ -41,8 +41,8 @@ def canned_webhook():
 
 
 def send_message(msg):
-  if 'BLOOMBOT_DEBUG' in os.environ:
-    print('[Bloombot]: ' + msg)
+  if 'HOUSEMATE_DEBUG' in os.environ:
+    print('[Housemate]: ' + msg)
     return
     
   # if not in debug mode, use the right url 
