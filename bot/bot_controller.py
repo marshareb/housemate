@@ -1,20 +1,16 @@
-from datetime import date
+import datetime
 import random
 
-def get_date_difference(date1, date2):
-    date_1 = list(map(lambda x: int(x), date1.split("-")))
-    date_1 = date(date_1[0], date_1[1], date_1[2])
-    date_2 = list(map(lambda x: int(x), date2.split("-")))
-    date_2 = date(date_2[0], date_2[1], date_2[2])
-    return int(abs(date_1-date_2).days)
-
-def cycle(lis):
-    return lis[1:] + [lis[0]]
 
 class BotController:
   # Static Members
-  chores = ['Dishes', 'Trash', 'Sweeping']
-  last_date = "2017-08-15"
+  chores_daily = ['Dishes', 'Trash', 'Sweeping']
+  chores_weekly = ['Living Room and Hall', 'Bathroom', 'Kitchen']
+  last_date = datetime.datetime.now().date()
+  last_week = datetime.datetime.now().date()
+
+  chore_assignment_daily = {'James' : 'Dishes', 'Chase' : 'Trash', 'Mike' : 'General Cleanliness'}
+  chore_assignment_weekly = {'James': 'Living Room and Hall', 'Chase' : 'Bathroom', 'Mike' : 'Kitchen'}
 
   JOKES = ['What’s the difference between a G-spot and a golf ball? A guy will actually search for a golf ball.',
            'Why was the guitar teacher arrested? For fingering a minor.',
@@ -22,7 +18,7 @@ class BotController:
   SONG = ['https://www.youtube.com/watch?v=y6120QOlsfU',
           'https://www.youtube.com/watch?v=L_jWHffIx5E',
           'https://www.youtube.com/watch?v=dQw4w9WgXcQ']
-  UPDATE_WORDS       = ['update']
+  DATE_WORDS       = ['date']
   GREETING_WORDS = ['hello', 'hi', 'what\'s up']
   JOKE_WORDS = ['joke']
   HELP_WORDS     = ['help', 'you do?']
@@ -38,12 +34,38 @@ class BotController:
   def text_preprocessing(self, text):
     return text.lower()
 
+  def update_daily(self):
+    temp = []
+    for i in BotController.chores_daily:
+      temp.append(i)
+    for i in BotController.chore_assignment_daily:
+      x = random.choice(temp)
+      BotController.chore_assignment_daily[i] = x
+      temp.remove(x)
+    BotController.last_date = datetime.datetime.now().date()
+
+  def update_weekly(self):
+    temp = []
+    for i in BotController.chores_weekly:
+      temp.append(i)
+    for i in BotController.chore_assignment_weekly:
+      x = random.choice(temp)
+      BotController.chore_assignment_weekly[i] = x
+      temp.remove(x)
+    BotController.last_week = datetime.datetime.now().date()
+
   def process_message(self, recd_msg):
-    today_date = str(date.today())
-    if get_date_difference(BotController.last_date, today_date) != 0:
-        for i in range(get_date_difference):
-            BotController.chores = cycle(BotController.chores)
-    msg_to_send = {} # reply
+    msg_to_send = {}  # reply
+    current_date = datetime.datetime.now().date()
+    if abs(BotController.last_week - current_date) >= 7:
+      BotController.update_weekly()
+      BotController.update_daily()
+      msg_to_send['text'] = 'It\'s a new week! I\'ve updated the chores. Ask me about chores to see.'
+      return msg_to_send
+    if BotController.last_date != current_date:
+      BotController.update_daily()
+      msg_to_send['text'] = 'It\'s a new day! I\'ve updated the chores. Ask me about chores to see'
+      return msg_to_send
 
     # Preprocessing
     text = recd_msg['text'].lower()
@@ -52,17 +74,15 @@ class BotController:
     used_any = lambda word_list: any(map(lambda x : x in text, word_list))
 
     # Use some hard-coded rules to decide what this message says
-    if used_any(BotController.UPDATE_WORDS):
-      today_date = str(date.today())
-      if get_date_difference(BotController.last_date, today_date) != 0:
-        for i in range(get_date_difference):
-            BotController.chores = cycle(BotController.chores)
-      msg_to_send['text'] = 'I\'ve updated! Last date updated: ' + str(BotController.last_date) + ', current date: ' + str(today_date) +'.'
-    elif used_any(BotController.GREETING_WORDS):
+    if used_any(BotController.GREETING_WORDS):
+      if recd_msg['author'] == 'Grandpa' or recd_msg['author'] == 'James':
+        msg_to_send['text'] = 'Hello master.'
       msg_to_send['text'] = 'Greetings to you, as well, {}!'.format(recd_msg['author'])
+    elif used_any(BotController.DATE_WORDS):
+      msg_to_send['text'] = 'The last date is ' + str(BotController.last_date) + ' and the current date is ' + str(current_date)
     elif used_any(BotController.HELP_WORDS):
       msg_to_send['text'] = ('Hi! I\'m the friendly house mate, the chatbot.  I don\'t do much right now,' +
-                             ' but I will help remind you who has to do what chore. I\'m still restricted to three chores.')
+                             ' but I will help remind you who has to do what chore.')
     elif used_any(BotController.CHORES_WORDS):
         msg_to_send['text'] = ('James: Your chore is ' + BotController.chores[0] +
                                '. Chase: Your chore is ' + BotController.chores[1] +
