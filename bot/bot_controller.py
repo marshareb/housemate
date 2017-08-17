@@ -15,8 +15,8 @@ class BotController:
   chore_assignment_weekly = {'James': '(Living Room and Hall)', 'Chase' : '(Bathroom)', 'Mike' : '(Kitchen)'}
 
 
-  completed_daily_chores = {'(Dishes)' : False, '(Trash)' : False, '(General Cleanliness)' : False}
-  completed_weekly_chores = {'(Living Room and Hall)': False, '(Bathroom)': False, '(Kitchen)': False}
+  completed_daily_chores = {'dishes' : False, 'trash' : False, 'general_cleanliness' : False}
+  completed_weekly_chores = {'livingroom_and_hall)': False, 'bathroom': False, 'kitchen': False}
 
   JOKES = ['What’s the difference between a G-spot and a golf ball? A guy will actually search for a golf ball.',
            'Why was the guitar teacher arrested? For fingering a minor.',
@@ -106,7 +106,6 @@ class BotController:
       msg = recd_msg['text'].split()
       msg.remove('housemate')
       msg.remove('completed')
-      msg.replace(" ", "")
       try:
           self.completed_daily_chores[msg[0]] = True
           msg_to_send['text'] += "Congrats for finishing " + str(msg[0])
