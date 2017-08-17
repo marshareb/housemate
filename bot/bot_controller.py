@@ -29,7 +29,7 @@ class BotController:
   GREETING_WORDS = ['hello', 'hi', 'what\'s up', 'sup', 'hey']
   JOKE_WORDS = ['joke', 'jokes']
   HELP_WORDS     = ['help', 'you do?']
-  CHORES_WORDS = ['chores', 'do', 'chore']
+  CHORES_WORDS = ['chores', 'chore']
   SONG_WORDS = ['music', 'sing']
   COMPLETED_WORDS = ['completed']
   FINISHED_WORDS = ['done']
