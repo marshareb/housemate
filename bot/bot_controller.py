@@ -90,7 +90,7 @@ class BotController:
       msg_to_send['text'] += ('Hi! I\'m the friendly house mate, the chatbot.  I don\'t do much right now,' +
                              ' but I will help remind you who has to do what chore.')
     elif used_any(BotController.UPDATE_WORDS):
-      BotController.update_daily(self)
+      BotController.update_daily()
       msg_to_send['text'] += 'Update complete.'
     elif used_any(BotController.CHORES_WORDS):
       msg_to_send['text'] += ""
