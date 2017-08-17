@@ -102,7 +102,8 @@ class BotController:
     #  msg_to_send['text'] += 'The last date is ' + str(BotController.last_date) + ' and the current date is ' + str(current_date)
     elif used_any(BotController.HELP_WORDS):
       msg_to_send['text'] += ('Hi! I\'m  housemate, the friendly chatbot.  I don\'t do much right now,' +
-                             ' but I will help remind you who has to do what chore.')
+                             ' but I will help remind you who has to do what chore. \n' +
+                             'I\'m still in alpha, so I don\'t promise anything.')
     elif used_any(BotController.UPDATE_WORDS):
       self.update_daily()
       msg_to_send['text'] += 'Update complete.'
