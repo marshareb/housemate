@@ -98,6 +98,7 @@ class BotController:
         msg_to_send['text'] += i
         msg_to_send['text'] += ": your daily chore is "
         msg_to_send['text'] += BotController.chore_assignment_daily[i]
+        msg_to_send['text'] += "\n"
         msg_to_send['text'] += " and your weekly chore is "
         msg_to_send['text'] += BotController.chore_assignment_weekly[i]
         msg_to_send['text'] += " "
