@@ -64,8 +64,8 @@ class BotController:
     elif current_date.day != 28 and BotController.check_monthly == True:
       BotController.check_monthly = False
     if int(abs(BotController.last_week - current_date).days) >= 7:
-      BotController.update_weekly()
-      BotController.update_daily()
+      BotController.update_weekly(self)
+      BotController.update_daily(self)
       msg_to_send['text'] += 'It\'s a new week! I\'ve updated the chores. Ask me about chores to see.'
     if BotController.last_date != current_date:
       BotController.update_daily()

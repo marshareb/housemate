@@ -16,7 +16,6 @@ bi  = BotInterface()
 @app.route('/', methods=['POST'])
 def webhook():
   data = request.get_json()
-
   # We don't want to reply to ourselves, and must mention us!
   if data['name'] != 'Housemate' and 'housemate' in data['text'].lower():
     msg = {}
