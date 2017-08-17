@@ -1,90 +1,16 @@
 import datetime
 import random
-import os
 
-def file_is_empty(name):
-  return os.stat(name).st_size==0
-
-def add_chore(person, chore):
-  f = open(str(person + '.txt'), 'a+')
-  f.write('\n' + str(chore))
-  f.close()
-
-def remove_chore(person, chore):
-  f = open(str(person + '.txt'), 'w+')
-  for line in f:
-    if line == str(chore):
-      line.replace(chore, '')
-  f.close()
-
-def deleteContent(pfile):
-    pfile.seek(0)
-    pfile.truncate()
-
-def get_chores(person):
-  chores = []
-  f = open(str(person + '_daily.txt'), 'r')
-  fo = open(str(person + '_weekly.txt'), 'r')
-  for line in f:
-    chores.append(line)
-  for line in fo:
-    chores.append(line)
-  f.close()
-  fo.close()
-  return chores
-
-def update_daily():
-  daily = open('daily_chores.txt', 'r')
-  james = open('James_daily.txt', 'w+')
-  chase = open('Chase_daily.txt', 'w+')
-  mike = open('Mike_daily.txt' 'w+')
-  chores = []
-  deleteContent(james)
-  deleteContent(chase)
-  deleteContent(mike)
-  for i in daily:
-    chores.append(i)
-  chores = random.shuffle(chores)
-  james.write(chores[0])
-  chase.write(chores[1])
-  mike.write(chores[2])
-  daily.close()
-  james.close()
-  chase.close()
-  mike.close()
-
-def update_weekly():
-  weekly = open('weekly_chores.txt', 'r')
-  james = open('James_weekly.txt', 'w+')
-  chase = open('Chase_weekly.txt', 'w+')
-  mike = open('Mike_weekly.txt' 'w+')
-  chores = []
-  deleteContent(james)
-  deleteContent(chase)
-  deleteContent(mike)
-  for i in weekly:
-    chores.append(i)
-  chores = random.shuffle(chores)
-  james.write(chores[0])
-  chase.write(chores[1])
-  mike.write(chores[2])
-  weekly.close()
-  james.close()
-  chase.close()
-  mike.close()
-
-def from_string(date):
-  date = date.split('-')
-  date = list(map(lambda x: int(x), date))
-  return datetime.date(date[0], date[1], date[2])
-
-def difference_of_dates(date1, date2):
-  date1 = from_string(date1)
-  date2 = from_string(date2)
-  return int(abs((date1-date2).days))
 
 class BotController:
   # Static Members
+  chores_daily = ['(Dishes)', '(Trash)', '(General Cleanliness)']
+  chores_weekly = ['(Living Room and Hall)', '(Bathroom)', '(Kitchen)']
+  last_date = datetime.datetime.now().date()
+  last_week = datetime.datetime.now().date()
+  check_monthly = False
+  chore_assignment_daily = {'James' : '(Dishes)', 'Chase' : '(Trash)', 'Mike' : '(General Cleanliness)'}
+  chore_assignment_weekly = {'James': '(Living Room and Hall)', 'Chase' : '(Bathroom)', 'Mike' : '(Kitchen)'}
 
   JOKES = ['What’s the difference between a G-spot and a golf ball? A guy will actually search for a golf ball.',
            'Why was the guitar teacher arrested? For fingering a minor.',
@@ -94,13 +20,12 @@ class BotController:
           'https://www.youtube.com/watch?v=dQw4w9WgXcQ']
   DATE_WORDS       = ['date']
   UPDATE_WORDS = ['update']
-  GREETING_WORDS = ['hello', 'hi', 'what\'s up', 'sup', 'hey']
+  GREETING_WORDS = ['hello', 'hi', 'what\'s up', 'sup']
   JOKE_WORDS = ['joke', 'jokes']
   HELP_WORDS     = ['help', 'you do?']
-  CHORES_WORDS = ['chores', 'chore']
+  CHORES_WORDS = ['chores', 'do', 'chore']
   SONG_WORDS = ['music', 'sing']
-  COMPLETED_WORDS = ['completed']
-  FINISHED_WORDS = ['done']
+
   # Field List:
   #  (none)
 
@@ -110,32 +35,41 @@ class BotController:
   def text_preprocessing(self, text):
     return text.lower()
 
+  def update_daily(self):
+    temp = []
+    for i in self.chores_daily:
+      temp.append(i)
+    for i in self.chore_assignment_daily:
+      x = random.choice(temp)
+      self.chore_assignment_daily[i] = x
+      temp.remove(x)
+    self.last_date = datetime.datetime.now().date()
+
+  def update_weekly(self):
+    temp = []
+    for i in self.chores_weekly:
+      temp.append(i)
+    for i in self.chore_assignment_weekly:
+      x = random.choice(temp)
+      self.chore_assignment_weekly[i] = x
+      temp.remove(x)
+    self.last_week = datetime.datetime.now().date()
+
   def process_message(self, recd_msg):
     msg_to_send = {}  # reply
     msg_to_send['text'] = ""
-    current_date = str(datetime.datetime.now().date())
-    last_dat = open('last_date.txt', 'w+')
-    last_date = last_dat.readline()
-    last_wek = open('last_week.txt', 'w+')
-    last_week = last_wek.readline()
-    if last_date == '':
-      last_dat.write(str(current_date))
-    if last_week == '':
-      last_wek.write(str(current_date))
-    if file_is_empty('James_daily.txt'):
-      msg_to_send['text'] += "I have not been initialized yet. Initializing now."
-      return msg_to_send
-      update_daily()
-      update_weekly()
-      last_dat.close()
-      last_wek.close()
-      return msg_to_send
-    if difference_of_dates(str(last_week), current_date) >= 7:
-      update_daily()
-      update_weekly()
+    current_date = datetime.datetime.now().date()
+    if current_date.day == 28 and self.check_monthly == False:
+      msg_to_send['text'] += "Don't forget about rent!\n"
+      self.check_monthly = True
+    elif current_date.day != 28 and self.check_monthly == True:
+      self.check_monthly = False
+    if int(abs(self.last_week - current_date).days) >= 7:
+      self.update_weekly()
+      self.update_daily()
       msg_to_send['text'] += 'It\'s a new week! I\'ve updated the chores. Ask me about chores to see.'
-    if last_date != current_date:
-      update_daily()
+    if self.last_date != current_date:
+      self.update_daily()
       msg_to_send['text'] += 'It\'s a new day! I\'ve updated the chores. Ask me about chores to see'
       return msg_to_send
 
@@ -147,43 +81,29 @@ class BotController:
 
     # Use some hard-coded rules to decide what this message says
     if used_any(BotController.GREETING_WORDS):
-      msg_to_send['text'] = 'Greetings to you {}!'.format(recd_msg['author'])
+      msg_to_send['text'] = 'Greetings to you, as well, {}!'.format(recd_msg['author'])
     #elif used_any(BotController.DATE_WORDS):
     #  msg_to_send['text'] += 'The last date is ' + str(BotController.last_date) + ' and the current date is ' + str(current_date)
     elif used_any(BotController.HELP_WORDS):
-      msg_to_send['text'] += ('Hi! I\'m  housemate, the friendly chatbot.  I don\'t do much right now,' +
-                             ' but I will help remind you who has to do what chore. \n' +
-                             'I\'m still in alpha, so I don\'t promise anything.')
+      msg_to_send['text'] += ('Hi! I\'m the friendly house mate, the chatbot.  I don\'t do much right now,' +
+                             ' but I will help remind you who has to do what chore.')
     elif used_any(BotController.UPDATE_WORDS):
-      update_daily()
+      self.update_daily()
       msg_to_send['text'] += 'Update complete.'
     elif used_any(BotController.CHORES_WORDS):
       msg_to_send['text'] += ""
-      for i in ['James', 'Chase', 'Mike']:
-        chores = get_chores(i)
+      for i in BotController.chore_assignment_daily:
         msg_to_send['text'] += i
         msg_to_send['text'] += ": your daily chore is "
-        msg_to_send['text'] += chores[0]
+        msg_to_send['text'] += BotController.chore_assignment_daily[i]
         msg_to_send['text'] += " and your weekly chore is "
-        msg_to_send['text'] += chores[1]
+        msg_to_send['text'] += BotController.chore_assignment_weekly[i]
         msg_to_send['text'] += "\n"
       msg_to_send['text'] += "Make sure to do them!"
     elif used_any(BotController.JOKE_WORDS):
       msg_to_send['text'] += random.choice(BotController.JOKES)
-    elif used_any(BotController.FINISHED_WORDS):
-      chores = []
-      for i in self.completed_chores:
-        if self.completed_chores[i] == False:
-          chores.append(i)
-      if len(chores) == 0:
-        msg_to_send['text'] += 'Congrats! All chores are done!'
-      else:
-        msg_to_send['text'] += "Chores to be done: \n"
-        for i in chores:
-          msg_to_send['text'] += str(i) + "\n"
     elif used_any(BotController.SONG_WORDS):
       msg_to_send['text'] += random.choice(BotController.SONG)
     else:
       msg_to_send['text'] += 'I can\'t tell what you\'re talking about.'
-
     return msg_to_send
