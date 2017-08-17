@@ -16,7 +16,7 @@ class BotController:
 
 
   completed_daily_chores = {'dishes' : False, 'trash' : False, 'general_cleanliness' : False}
-  completed_weekly_chores = {'livingroom_and_hall)': False, 'bathroom': False, 'kitchen': False}
+  completed_weekly_chores = {'livingroom_and_hall': False, 'bathroom': False, 'kitchen': False}
 
   JOKES = ['What’s the difference between a G-spot and a golf ball? A guy will actually search for a golf ball.',
            'Why was the guitar teacher arrested? For fingering a minor.',
@@ -132,17 +132,17 @@ class BotController:
     elif used_any(BotController.FINISHED_WORDS):
       chores = []
       for i in self.completed_daily_chores:
-          if self.completed_daily_chores[i] == False:
-              chores.append(i)
+        if self.completed_daily_chores[i] == False:
+          chores.append(i)
       for i in self.completed_weekly_chores:
-          if self.completed_weekly_chores[i] == False:
-              chores.append(i)
+        if self.completed_weekly_chores[i] == False:
+          chores.append(i)
       if len(chores) == 0:
-          msg_to_send['text'] += 'Congrats! All chores are done!'
+        msg_to_send['text'] += 'Congrats! All chores are done!'
       else:
-          msg_to_send['text'] += "Chores to be done: \n"
-          for i in chores:
-              msg_to_send['text'] += str(i) + "\n"
+        msg_to_send['text'] += "Chores to be done: \n"
+        for i in chores:
+          msg_to_send['text'] += str(i) + "\n"
     elif used_any(BotController.SONG_WORDS):
       msg_to_send['text'] += random.choice(BotController.SONG)
     else:
