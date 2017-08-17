@@ -1,0 +1,3 @@
+(Dishes)
+(Trash)
+(General Cleanliness)
