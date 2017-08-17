@@ -81,7 +81,7 @@ class BotController:
 
     # Use some hard-coded rules to decide what this message says
     if used_any(BotController.GREETING_WORDS):
-      msg_to_send['text'] = 'Greetings to you, as well, {}!'.format(recd_msg['author'])
+      msg_to_send['text'] = 'Greetings to you {}!'.format(recd_msg['author'])
     #elif used_any(BotController.DATE_WORDS):
     #  msg_to_send['text'] += 'The last date is ' + str(BotController.last_date) + ' and the current date is ' + str(current_date)
     elif used_any(BotController.HELP_WORDS):
