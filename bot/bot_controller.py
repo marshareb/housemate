@@ -124,6 +124,7 @@ class BotController:
       last_wek.write(str(current_date))
     if file_is_empty('James_daily.txt'):
       msg_to_send['text'] += "I have not been initialized yet. Initializing now."
+      return msg_to_send
       update_daily()
       update_weekly()
       last_dat.close()
