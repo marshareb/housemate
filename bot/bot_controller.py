@@ -4,7 +4,7 @@ import random
 
 class BotController:
   # Static Members
-  chores_daily = ['(Dishes)', '(Trash)', '(Sweeping)']
+  chores_daily = ['(Dishes)', '(Trash)', '(General Cleanliness)']
   chores_weekly = ['(Living Room and Hall)', '(Bathroom)', '(Kitchen)']
   last_date = datetime.datetime.now().date()
   last_week = datetime.datetime.now().date()
