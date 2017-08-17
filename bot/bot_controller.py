@@ -60,7 +60,7 @@ class BotController:
     msg_to_send['text'] = ""
     current_date = datetime.datetime.now().date()
     if current_date.day == 28 and self.check_monthly == False:
-      msg_to_send['text'] += "Don't forget about rent! "
+      msg_to_send['text'] += "Don't forget about rent!\n"
       self.check_monthly = True
     elif current_date.day != 28 and self.check_monthly == True:
       self.check_monthly = False
@@ -81,8 +81,6 @@ class BotController:
 
     # Use some hard-coded rules to decide what this message says
     if used_any(BotController.GREETING_WORDS):
-      if recd_msg['author'] == 'Grandpa' or recd_msg['author'] == 'James':
-        msg_to_send['text'] += 'Hello master.'
       msg_to_send['text'] = 'Greetings to you, as well, {}!'.format(recd_msg['author'])
     #elif used_any(BotController.DATE_WORDS):
     #  msg_to_send['text'] += 'The last date is ' + str(BotController.last_date) + ' and the current date is ' + str(current_date)
