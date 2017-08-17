@@ -57,7 +57,7 @@ class BotController:
   def process_message(self, recd_msg):
     msg_to_send = {}  # reply
     current_date = datetime.datetime.now().date()
-    if abs(BotController.last_week - current_date) >= 7:
+    if int(abs(BotController.last_week - current_date).days) >= 7:
       BotController.update_weekly()
       BotController.update_daily()
       msg_to_send['text'] = 'It\'s a new week! I\'ve updated the chores. Ask me about chores to see.'
