@@ -19,6 +19,7 @@ class BotController:
           'https://www.youtube.com/watch?v=L_jWHffIx5E',
           'https://www.youtube.com/watch?v=dQw4w9WgXcQ']
   DATE_WORDS       = ['date']
+  UPDATE_WORDS = ['update']
   GREETING_WORDS = ['hello', 'hi', 'what\'s up', 'sup']
   JOKE_WORDS = ['joke', 'jokes']
   HELP_WORDS     = ['help', 'you do?']
@@ -88,6 +89,9 @@ class BotController:
     elif used_any(BotController.HELP_WORDS):
       msg_to_send['text'] += ('Hi! I\'m the friendly house mate, the chatbot.  I don\'t do much right now,' +
                              ' but I will help remind you who has to do what chore.')
+    elif used_any(BotController.UPDATE_WORDS):
+      BotController.update_daily(self)
+      msg_to_send['text'] += 'Update complete.'
     elif used_any(BotController.CHORES_WORDS):
       msg_to_send['text'] += ""
       for i in BotController.chore_assignment_daily:
