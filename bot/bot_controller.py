@@ -4,13 +4,13 @@ import random
 
 class BotController:
   # Static Members
-  chores_daily = ['Dishes', 'Trash', 'Sweeping']
-  chores_weekly = ['Living Room and Hall', 'Bathroom', 'Kitchen']
+  chores_daily = ['(Dishes)', '(Trash)', '(Sweeping)']
+  chores_weekly = ['(Living Room and Hall)', '(Bathroom)', '(Kitchen)']
   last_date = datetime.datetime.now().date()
   last_week = datetime.datetime.now().date()
 
-  chore_assignment_daily = {'James' : 'Dishes', 'Chase' : 'Trash', 'Mike' : 'General Cleanliness'}
-  chore_assignment_weekly = {'James': 'Living Room and Hall', 'Chase' : 'Bathroom', 'Mike' : 'Kitchen'}
+  chore_assignment_daily = {'James' : '(Dishes)', 'Chase' : '(Trash)', 'Mike' : '(General Cleanliness)'}
+  chore_assignment_weekly = {'James': '(Living Room and Hall)', 'Chase' : '(Bathroom)', 'Mike' : '(Kitchen)'}
 
   JOKES = ['What’s the difference between a G-spot and a golf ball? A guy will actually search for a golf ball.',
            'Why was the guitar teacher arrested? For fingering a minor.',
