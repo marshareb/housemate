@@ -22,5 +22,8 @@ housemate jokes
 
 returns a random joke.
 
+Chores are determined randomly. There are two subcategories of chores; daily and weekly. These are updated appropriately
+so long as you either have dailyupdater.py running or you use the chat daily.
+
 
 Further instructions TBD.
