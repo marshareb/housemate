@@ -3,17 +3,16 @@ import datetime
 import time
 
 if __name__ == '__main__':
-    groups = groupy.Group.list()
+    bot = groupy.Bot.list().first
     # i represents the index
-    i = 0
-    for g in groups:
-        if g.name == "apartment":
-            break
-        i += 1
     last_date = datetime.datetime.now().date()
     while True:
+        print('running...')
+        print('last date: ' + str(last_date))
         current_date = datetime.datetime.now().date()
+        print('current date: ' + str(current_date))
         if last_date != current_date:
-            groups[i].post("It's a new day.")
+            print('It\'s a new day!')
+            bot.post("Beginning daily update...")
             last_date = datetime.datetime.now().date()
-        time.sleep(3600)
+    time.sleep(3600)
