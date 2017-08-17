@@ -8,9 +8,15 @@ class BotController:
   chores_weekly = ['(Living Room and Hall)', '(Bathroom)', '(Kitchen)']
   last_date = datetime.datetime.now().date()
   last_week = datetime.datetime.now().date()
+  # For rent
   check_monthly = False
+
   chore_assignment_daily = {'James' : '(Dishes)', 'Chase' : '(Trash)', 'Mike' : '(General Cleanliness)'}
   chore_assignment_weekly = {'James': '(Living Room and Hall)', 'Chase' : '(Bathroom)', 'Mike' : '(Kitchen)'}
+
+
+  completed_daily_chores = {'(Dishes)' : False, '(Trash)' : False, '(General Cleanliness)' : False}
+  completed_weekly_chores = {'(Living Room and Hall)': False, '(Bathroom)': False, '(Kitchen)': False}
 
   JOKES = ['What’s the difference between a G-spot and a golf ball? A guy will actually search for a golf ball.',
            'Why was the guitar teacher arrested? For fingering a minor.',
@@ -20,12 +26,13 @@ class BotController:
           'https://www.youtube.com/watch?v=dQw4w9WgXcQ']
   DATE_WORDS       = ['date']
   UPDATE_WORDS = ['update']
-  GREETING_WORDS = ['hello', 'hi', 'what\'s up', 'sup']
+  GREETING_WORDS = ['hello', 'hi', 'what\'s up', 'sup', 'hey']
   JOKE_WORDS = ['joke', 'jokes']
   HELP_WORDS     = ['help', 'you do?']
   CHORES_WORDS = ['chores', 'do', 'chore']
   SONG_WORDS = ['music', 'sing']
-
+  COMPLETED_WORDS = ['completed']
+  FINISHED_WORDS = ['done']
   # Field List:
   #  (none)
 
@@ -68,9 +75,13 @@ class BotController:
       self.update_weekly(self)
       self.update_daily(self)
       msg_to_send['text'] += 'It\'s a new week! I\'ve updated the chores. Ask me about chores to see.'
+      for i in self.completed_weekly_chores:
+          self.completed_weekly_chores[i] = False
     if self.last_date != current_date:
       self.update_daily()
       msg_to_send['text'] += 'It\'s a new day! I\'ve updated the chores. Ask me about chores to see'
+      for i in self.completed_daily_chores:
+          self.completed_daily_chores[i] = False
       return msg_to_send
 
     # Preprocessing
@@ -85,11 +96,26 @@ class BotController:
     #elif used_any(BotController.DATE_WORDS):
     #  msg_to_send['text'] += 'The last date is ' + str(BotController.last_date) + ' and the current date is ' + str(current_date)
     elif used_any(BotController.HELP_WORDS):
-      msg_to_send['text'] += ('Hi! I\'m the friendly house mate, the chatbot.  I don\'t do much right now,' +
+      msg_to_send['text'] += ('Hi! I\'m  housemate, the friendly chatbot.  I don\'t do much right now,' +
                              ' but I will help remind you who has to do what chore.')
     elif used_any(BotController.UPDATE_WORDS):
       self.update_daily()
       msg_to_send['text'] += 'Update complete.'
+    elif used_any(BotController.COMPLETED_WORDS):
+      # clean up message
+      msg = recd_msg['text'].split()
+      msg.remove('housemate')
+      msg.remove('completed')
+      msg.replace(" ", "")
+      try:
+          self.completed_daily_chores[msg[0]] = True
+          msg_to_send['text'] += "Congrats for finishing " + str(msg[0])
+      except:
+        try:
+          self.completed_weekly_chores[msg[0]] = True
+          msg_to_send['text'] += "Congrats for finishing " + str(msg[0])
+        except:
+          msg_to_send['text'] += 'Error: cannot find chore.'
     elif used_any(BotController.CHORES_WORDS):
       msg_to_send['text'] += ""
       for i in BotController.chore_assignment_daily:
@@ -102,6 +128,20 @@ class BotController:
       msg_to_send['text'] += "Make sure to do them!"
     elif used_any(BotController.JOKE_WORDS):
       msg_to_send['text'] += random.choice(BotController.JOKES)
+    elif used_any(BotController.FINISHED_WORDS):
+      chores = []
+      for i in self.completed_daily_chores:
+          if self.completed_daily_chores[i] == False:
+              chores.append(i)
+      for i in self.completed_weekly_chores:
+          if self.completed_weekly_chores[i] == False:
+              chores.append(i)
+      if len(chores) == 0:
+          msg_to_send['text'] += 'Congrats! All chores are done!'
+      else:
+          msg_to_send['text'] += "Chores to be done: \n"
+          for i in chores:
+              msg_to_send['text'] += str(i) + "\n"
     elif used_any(BotController.SONG_WORDS):
       msg_to_send['text'] += random.choice(BotController.SONG)
     else:
