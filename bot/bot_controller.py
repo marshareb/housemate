@@ -15,8 +15,8 @@ class BotController:
   chore_assignment_weekly = {'James': '(Living Room and Hall)', 'Chase' : '(Bathroom)', 'Mike' : '(Kitchen)'}
 
 
-  completed_daily_chores = {'dishes' : False, 'trash' : False, 'general_cleanliness' : False}
-  completed_weekly_chores = {'livingroom_and_hall': False, 'bathroom': False, 'kitchen': False}
+  completed_chores = {'dishes' : False, 'trash' : False, 'general_cleanliness' : False,
+                            'livingroom_and_hall': False, 'bathroom': False, 'kitchen': False}
 
   JOKES = ['What’s the difference between a G-spot and a golf ball? A guy will actually search for a golf ball.',
            'Why was the guitar teacher arrested? For fingering a minor.',
@@ -109,12 +109,9 @@ class BotController:
       if len(msg) != 1:
         msg_to_send['text'] += 'Error: cannot find chore.'
       else:
-        if msg[0] in self.completed_daily_chores:
-          self.completed_daily_chores[msg[0]] = True
-          msg_to_send['text'] += 'Congrats for finishing the daily chore ' + str(msg[0])
-        elif msg[0] in self.completed_weekly_chores:
-          self.completed_weekly_chores[msg[0]] = True
-          msg_to_send['text'] += 'Congrats for finishing the weekly chore ' + str(msg[0])
+        if msg[0] in self.completed_chores:
+          self.completed_chores[msg[0]] = True
+          msg_to_send['text'] += 'Congrats for finishing the chore ' + str(msg[0])
         else:
           msg_to_send['text'] += 'Error: cannot find chore.'
     elif used_any(BotController.CHORES_WORDS):
@@ -131,11 +128,8 @@ class BotController:
       msg_to_send['text'] += random.choice(BotController.JOKES)
     elif used_any(BotController.FINISHED_WORDS):
       chores = []
-      for i in self.completed_daily_chores:
-        if self.completed_daily_chores[i] == False:
-          chores.append(i)
-      for i in self.completed_weekly_chores:
-        if self.completed_weekly_chores[i] == False:
+      for i in self.completed_chores:
+        if self.completed_chores[i] == False:
           chores.append(i)
       if len(chores) == 0:
         msg_to_send['text'] += 'Congrats! All chores are done!'
