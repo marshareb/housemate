@@ -19,10 +19,10 @@ class BotController:
           'https://www.youtube.com/watch?v=L_jWHffIx5E',
           'https://www.youtube.com/watch?v=dQw4w9WgXcQ']
   DATE_WORDS       = ['date']
-  GREETING_WORDS = ['hello', 'hi', 'what\'s up']
-  JOKE_WORDS = ['joke']
+  GREETING_WORDS = ['hello', 'hi', 'what\'s up', 'sup']
+  JOKE_WORDS = ['joke', 'jokes']
   HELP_WORDS     = ['help', 'you do?']
-  CHORES_WORDS = ['chores', 'do']
+  CHORES_WORDS = ['chores', 'do', 'chore']
   SONG_WORDS = ['music', 'sing']
 
   # Field List:
