@@ -67,6 +67,8 @@ class BotController:
     msg_to_send['text'] = ""
     if self.chore_assignment_daily['James'] == "":
       msg_to_send['text'] += "The dynos have randomly reset. Resetting chores..."
+      self.update_daily()
+      self.update_weekly()
       return msg_to_send
     current_date = datetime.datetime.now().date()
     if current_date.day == 28 and self.check_monthly == False:
