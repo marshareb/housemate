@@ -84,8 +84,8 @@ class BotController:
       if recd_msg['author'] == 'Grandpa' or recd_msg['author'] == 'James':
         msg_to_send['text'] += 'Hello master.'
       msg_to_send['text'] = 'Greetings to you, as well, {}!'.format(recd_msg['author'])
-    elif used_any(BotController.DATE_WORDS):
-      msg_to_send['text'] += 'The last date is ' + str(BotController.last_date) + ' and the current date is ' + str(current_date)
+    #elif used_any(BotController.DATE_WORDS):
+    #  msg_to_send['text'] += 'The last date is ' + str(BotController.last_date) + ' and the current date is ' + str(current_date)
     elif used_any(BotController.HELP_WORDS):
       msg_to_send['text'] += ('Hi! I\'m the friendly house mate, the chatbot.  I don\'t do much right now,' +
                              ' but I will help remind you who has to do what chore.')
