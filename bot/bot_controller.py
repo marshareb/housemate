@@ -37,39 +37,39 @@ class BotController:
 
   def update_daily(self):
     temp = []
-    for i in BotController.chores_daily:
+    for i in self.chores_daily:
       temp.append(i)
-    for i in BotController.chore_assignment_daily:
+    for i in self.chore_assignment_daily:
       x = random.choice(temp)
-      BotController.chore_assignment_daily[i] = x
+      self.chore_assignment_daily[i] = x
       temp.remove(x)
-    BotController.last_date = datetime.datetime.now().date()
+    self.last_date = datetime.datetime.now().date()
 
   def update_weekly(self):
     temp = []
-    for i in BotController.chores_weekly:
+    for i in self.chores_weekly:
       temp.append(i)
-    for i in BotController.chore_assignment_weekly:
+    for i in self.chore_assignment_weekly:
       x = random.choice(temp)
-      BotController.chore_assignment_weekly[i] = x
+      self.chore_assignment_weekly[i] = x
       temp.remove(x)
-    BotController.last_week = datetime.datetime.now().date()
+    self.last_week = datetime.datetime.now().date()
 
   def process_message(self, recd_msg):
     msg_to_send = {}  # reply
     msg_to_send['text'] = ""
     current_date = datetime.datetime.now().date()
-    if current_date.day == 28 and BotController.check_monthly == False:
+    if current_date.day == 28 and self.check_monthly == False:
       msg_to_send['text'] += "Don't forget about rent! "
-      BotController.check_monthly = True
-    elif current_date.day != 28 and BotController.check_monthly == True:
-      BotController.check_monthly = False
-    if int(abs(BotController.last_week - current_date).days) >= 7:
-      BotController.update_weekly(self)
-      BotController.update_daily(self)
+      self.check_monthly = True
+    elif current_date.day != 28 and self.check_monthly == True:
+      self.check_monthly = False
+    if int(abs(self.last_week - current_date).days) >= 7:
+      self.update_weekly(self)
+      self.update_daily(self)
       msg_to_send['text'] += 'It\'s a new week! I\'ve updated the chores. Ask me about chores to see.'
-    if BotController.last_date != current_date:
-      BotController.update_daily()
+    if self.last_date != current_date:
+      self.update_daily()
       msg_to_send['text'] += 'It\'s a new day! I\'ve updated the chores. Ask me about chores to see'
       return msg_to_send
 
@@ -90,7 +90,7 @@ class BotController:
       msg_to_send['text'] += ('Hi! I\'m the friendly house mate, the chatbot.  I don\'t do much right now,' +
                              ' but I will help remind you who has to do what chore.')
     elif used_any(BotController.UPDATE_WORDS):
-      BotController.update_daily()
+      self.update_daily()
       msg_to_send['text'] += 'Update complete.'
     elif used_any(BotController.CHORES_WORDS):
       msg_to_send['text'] += ""
