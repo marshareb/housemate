@@ -11,8 +11,8 @@ class BotController:
   # For rent
   check_monthly = False
 
-  chore_assignment_daily = {'James' : '(Dishes)', 'Chase' : '(Trash)', 'Mike' : '(General Cleanliness)'}
-  chore_assignment_weekly = {'James': '(Living Room and Hall)', 'Chase' : '(Bathroom)', 'Mike' : '(Kitchen)'}
+  chore_assignment_daily = {'James' : "", 'Chase' : "", 'Mike' : ""}
+  chore_assignment_weekly = {'James': "", 'Chase' : "", 'Mike' : ""}
 
 
   completed_chores = {'dishes' : False, 'trash' : False, 'general_cleanliness' : False,
@@ -65,6 +65,9 @@ class BotController:
   def process_message(self, recd_msg):
     msg_to_send = {}  # reply
     msg_to_send['text'] = ""
+    if self.chore_assignment_daily['James'] == "":
+      msg_to_send['text'] += "The dynos have randomly reset. Resetting chores..."
+      return msg_to_send
     current_date = datetime.datetime.now().date()
     if current_date.day == 28 and self.check_monthly == False:
       msg_to_send['text'] += "Don't forget about rent!\n"
