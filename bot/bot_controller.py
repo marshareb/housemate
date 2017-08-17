@@ -98,11 +98,10 @@ class BotController:
         msg_to_send['text'] += i
         msg_to_send['text'] += ": your daily chore is "
         msg_to_send['text'] += BotController.chore_assignment_daily[i]
-        msg_to_send['text'] += "\n"
         msg_to_send['text'] += " and your weekly chore is "
         msg_to_send['text'] += BotController.chore_assignment_weekly[i]
-        msg_to_send['text'] += " "
-      msg_to_send['text'] += "-- make sure to do them!"
+        msg_to_send['text'] += "\n"
+      msg_to_send['text'] += "Make sure to do them!"
     elif used_any(BotController.JOKE_WORDS):
       msg_to_send['text'] += random.choice(BotController.JOKES)
     elif used_any(BotController.SONG_WORDS):
