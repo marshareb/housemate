@@ -106,14 +106,16 @@ class BotController:
       msg = recd_msg['text'].split()
       msg.remove('housemate')
       msg.remove('completed')
-      try:
+      if len(msg) != 1:
+        msg_to_send['text'] += 'Error: cannot find chore.'
+      else:
+        if msg[0] in self.completed_daily_chores:
           self.completed_daily_chores[msg[0]] = True
-          msg_to_send['text'] += "Congrats for finishing " + str(msg[0])
-      except:
-        try:
+          msg_to_send['text'] += 'Congrats for finishing the daily chore ' + str(msg[0])
+        elif msg[0] in self.completed_weekly_chores:
           self.completed_weekly_chores[msg[0]] = True
-          msg_to_send['text'] += "Congrats for finishing " + str(msg[0])
-        except:
+          msg_to_send['text'] += 'Congrats for finishing the weekly chore ' + str(msg[0])
+        else:
           msg_to_send['text'] += 'Error: cannot find chore.'
     elif used_any(BotController.CHORES_WORDS):
       msg_to_send['text'] += ""
