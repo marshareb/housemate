@@ -33,7 +33,7 @@ if __name__ == '__main__':
 
     brain = brain.Brain(bot, datetime.datetime.now().date())
 
-    #bot.post("Hello! I've been updated or the server has been reset.")
+    bot.post("Hello! I've been updated or the server has been reset.")
 
     # Loop to continuously run
     while True:
