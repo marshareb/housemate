@@ -1,59 +1,47 @@
-import os
-import sys
-import json
+import brain
+import time
+import datetime
+import groupy
 
-from urllib.parse import urlencode
-from urllib.request import Request, urlopen
+def process_message(message):
+    return message.lower()
 
-from flask import Flask, request
+if __name__ == '__main__':
+    # Get the appropriate variables
 
-from bot.bot_interface import BotInterface
+    # Housemate here is the name of the bot that housemate will be using.
+    index = 0
+    bots = groupy.Bot.list()
+    for i in range(len(bots)):
+        if bots[i] == 'Housemate':
+            index = i
 
-app = Flask(__name__)
-bi  = BotInterface()
+    bot = bots[index]
 
+    # apartment here is the name of the group you want Housemate to watch
+    index = 0
+    groups = groupy.Group.list()
+    for i in range(len(groups)):
+        if groups[i] == 'apartment':
+            index = i
 
-@app.route('/', methods=['POST'])
-def webhook():
-  data = request.get_json()
-  # We don't want to reply to ourselves, and must mention us!
-  if data['name'] != 'Housemate' and 'housemate' in data['text'].lower():
-    msg = {}
-    msg['author']    = data['name']
-    msg['author_id'] = data['sender_id']
-    msg['text']      = data['text']
+    group = groups[index]
 
-    reply = bi.process_message(msg)
-    if reply:
-      send_message(reply['text'])
+    # Assign the two dates to check.
+    last_date = datetime.datetime.now().date()
+    last_week = datetime.datetime.now().date()
 
-  return "ok", 200
+    brain = brain.Brain(bot, datetime.datetime.now().date())
 
-@app.route('/canned', methods=['POST'])
-def canned_webhook():
-  data = request.get_json()
-  print(data)
-  reply = bi.canned_reply(data['topic'])
-  send_message(reply['text'])
+    #bot.post("Hello! I've been updated or the server has been reset.")
 
-  return "ok", 200
+    # Loop to continuously run
+    while True:
+        current_date = datetime.datetime.now()
+        brain.check_date(current_date)
 
+        # Grab the most recent message in the group and lowercase it.
+        last_message = group.messages().newest.text
+        brain.process_message(last_message.lower())
 
-def send_message(msg):
-  if 'HOUSEMATE_DEBUG' in os.environ:
-    print('[Housemate]: ' + msg)
-    return
-    
-  # if not in debug mode, use the right url 
-  url  = 'https://api.groupme.com/v3/bots/post'
-
-  data = {
-          'bot_id' : os.getenv('GROUPME_BOT_ID'),
-          'text'   : msg,
-         }
-  request = Request(url, urlencode(data).encode())
-  json = urlopen(request).read().decode()
-  
-def log(msg):
-  print(str(msg))
-  sys.stdout.flush()
+        time.sleep(3)
