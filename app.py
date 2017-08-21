@@ -41,7 +41,10 @@ if __name__ == '__main__':
         brain.check_date(current_date)
 
         # Grab the most recent message in the group and lowercase it.
-        last_message = group.messages().newest.text
-        brain.process_message(last_message.lower())
+        try:
+            last_message = group.messages().newest.text
+            brain.process_message(last_message.lower())
+        except:
+            print("Server down. Will try again later.")
 
         time.sleep(3)
