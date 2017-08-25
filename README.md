@@ -17,6 +17,9 @@ you'll go to https://dev.groupme.com and click on the access token tab in the to
 After creating your .groupy.key file, you'll need to next build a bot. While in https://dev.groupme.com, click on the Bots tab
 and click Create a Bot. Give the bot the name 'Housemate' and whatever Avatar URL you want. Move your bot to the appropriate group.
 
+In the folder, create a text file called "address.txt", with the name of the city that the house is located in. This is so that
+Housemate can grab the weather information for your city.
+
 Finally, on line 15 in app.py change the name from 'apartment' to the name of your group. Run app.py on a dedicated computer or server, and you now have
 a housemate bot!
 

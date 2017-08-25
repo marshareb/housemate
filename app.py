@@ -6,6 +6,15 @@ import groupy
 def process_message(message):
     return message.lower()
 
+def get_location():
+    # Get the address from address.txt
+    f = open("address.txt", 'r')
+    address = f.readline()
+    f.close()
+
+    return str(address)
+
+
 if __name__ == '__main__':
     # Get the appropriate variables
 
@@ -31,7 +40,9 @@ if __name__ == '__main__':
     last_date = datetime.datetime.now().date()
     last_week = datetime.datetime.now().date()
 
-    brain = brain.Brain(bot, datetime.datetime.now().date())
+    location = get_location()
+
+    brain = brain.Brain(bot, datetime.datetime.now().date(), location)
 
     bot.post("Hello! I've been updated or the server has been reset.")
 

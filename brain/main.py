@@ -1,4 +1,5 @@
 import random
+import weather
 
 # Used any function
 def used_any(text, word_list):
@@ -20,6 +21,9 @@ class Brain:
     # Completed Chores hashtable
     completed_chores = {'dishes' : False, 'trash' : False, 'general_cleanliness' : False, 'living_room_and_hall' : False,
                         'bathroom' : False, 'kitchen' : False}
+
+    completed_chores_daily = ['dishes', 'trash', 'general_cleanliness']
+    completed_chores_weekly = ['living_room_and_hall', 'bathroom', 'kitchen']
 
     # Stuff for fun
     JOKES = ['What’s the difference between a G-spot and a golf ball? A guy will actually search for a golf ball.',
@@ -43,15 +47,15 @@ class Brain:
     UNDO_WORDS = ['back']
     TODO_WORDS = ['do', 'done']
     TRADE_WORDS = ['trade']
-
+    WEATHER_WORDS = ['forecast', 'weather']
 
     # Resets completed chores.
     def reset_chores(self, daily):
         if daily == True:
-            for i in self.chores_daily:
+            for i in self.completed_chores_daily:
                 self.completed_chores[i] = False
         else:
-            for i in self.chores_weekly:
+            for i in self.completed_chores_weekly:
                 self.completed_chores[i] = False
 
     # Update the chores
@@ -84,7 +88,9 @@ class Brain:
             self.chores_assignment_weekly[person1] = chore2
             self.chores_assignment_weekly[person2] = chore1
 
-    def __init__(self, Bot, date):
+    def __init__(self, Bot, date, location):
+        self.weather = weather.Weather()
+        self.location = self.weather.lookup_by_location(location)
         self.last_date = date
         self.last_week = date
         self.bot = Bot
@@ -92,11 +98,19 @@ class Brain:
         self.update_chores(True)
         self.update_chores(False)
 
+    def get_weather(self):
+        forecast = self.location.forecast()[0]
+        self.bot.post("The forecast for today is " + str(forecast['text']) + "\n")
+        self.bot.post("The high for today is " + str(forecast['high']) + " and the low for today is " +
+                      str(forecast['low']))
+
     def check_date(self, obdate):
         hour = obdate.time().hour
         date = obdate.date()
         if int(hour) == 5 and int(date.day) == 28:
             self.bot.post("Don't forget about rent!")
+        if int(hour) == 8:
+            self.get_weather()
         if self.last_date != date:
             # Asign new daily chores
             self.update_chores(True)
@@ -135,6 +149,9 @@ class Brain:
             elif used_any(last_message, self.SONG_WORDS):
                 x = random.choice(self.SONG)
                 self.bot.post(x)
+            elif used_any(last_message, self.WEATHER_WORDS):
+                self.bot.post("Here is the weather forecast: \n")
+                self.get_weather()
             elif used_any(last_message, self.CHORES_WORDS):
                 msg_to_send = ""
                 for i in self.chores_assignment_daily:
