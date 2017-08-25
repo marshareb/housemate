@@ -139,7 +139,7 @@ class Brain:
             if used_any(last_message, self.UPDATE_WORDS):
                 # To double check if updating is working.
                 self.bot.post('Updating...')
-                chore_assignment_daily = self.update_chores(True)
+                self.update_chores(True)
                 self.bot.post('Finished updating!')
             elif used_any(last_message, self.GREETING_WORDS):
                 self.bot.post('Heyo')
