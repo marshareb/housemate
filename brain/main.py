@@ -169,7 +169,7 @@ class Brain:
                 if len(last_message) == 0:
                     self.get_weather()
                 else:
-                    if last_message[1] == 'tomorrow':
+                    if last_message[0] == 'tomorrow':
                         self.get_weather(not_tomorrow = False)
             elif used_any(last_message, self.CHORES_WORDS):
                 msg_to_send = ""
