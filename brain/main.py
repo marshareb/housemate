@@ -29,6 +29,7 @@ class Brain:
     JOKES = ['What’s the difference between a G-spot and a golf ball? A guy will actually search for a golf ball.',
              'Why was the guitar teacher arrested? For fingering a minor.',
              'Why does Santa Claus have such a big sack? He only comes once a year.']
+
     SONG = ['https://www.youtube.com/watch?v=y6120QOlsfU',
             'https://www.youtube.com/watch?v=L_jWHffIx5E',
             'https://www.youtube.com/watch?v=dQw4w9WgXcQ']
@@ -98,11 +99,22 @@ class Brain:
         self.update_chores(True)
         self.update_chores(False)
 
-    def get_weather(self):
-        forecast = self.location.forecast()[0]
-        self.bot.post("The forecast for today is " + str(forecast['text']) + "\n")
-        self.bot.post("The high for today is " + str(forecast['high']) + " and the low for today is " +
-                      str(forecast['low']))
+    def get_weather(self, not_tomorrow = True):
+        if not_tomorrow:
+            # Get the forecast for today
+            forecast = self.location.forecast()[0]
+            message = ""
+            message += ("The forecast for today is " + str(forecast['text']) + ". \n")
+            message += ("The high for today is " + str(forecast['high']) + " and the low for today is " +
+                          str(forecast['low']) + ".")
+        else:
+            # Get the forecast for tomorrow
+            forecast = self.location.forecast()[1]
+            message = ""
+            message += ("The forecast for tomorrow is " + str(forecast['text'] + ". \n"))
+            message += ("The high for tomorrow is " + str(forecast['high']) + " and the low for tomorrow is " +
+                                                                            str(forecast['low']) + ".")
+        self.bot.post(message)
 
     def check_date(self, obdate):
         hour = obdate.time().hour
@@ -150,8 +162,14 @@ class Brain:
                 x = random.choice(self.SONG)
                 self.bot.post(x)
             elif used_any(last_message, self.WEATHER_WORDS):
-                self.bot.post("Here is the weather forecast: \n")
-                self.get_weather()
+                last_message = last_message.split()
+                last_message.remove('!housemate')
+                if last_message[1] == 'forecast' or last_message[1] == 'weather':
+                    last_message.remove(last_message[1])
+                if last_message[1] == 'tomorrow':
+                    self.get_weather(not_tomorrow = False)
+                else:
+                    self.get_weather()
             elif used_any(last_message, self.CHORES_WORDS):
                 msg_to_send = ""
                 for i in self.chores_assignment_daily:
