@@ -36,6 +36,9 @@ class Brain:
 
     rent_check = False
 
+    weather_check = False
+
+
     # Key Words
     DATE_WORDS = ['date']
     UPDATE_WORDS = ['update']
@@ -118,10 +121,13 @@ class Brain:
 
     def check_date(self, obdate):
         hour = obdate.time().hour
+        minute = obdate.time().minute
         date = obdate.date()
-        if int(hour) == 5 and int(date.day) == 28:
+        if int(hour) == 10 and int(minute) == 30 and int(date.day) == 28 and self.rent_check == False:
+            self.rent_check = True
             self.bot.post("Don't forget about rent!")
-        if int(hour) == 8:
+        if int(hour) == 8 and int(minute) == 30 and self.weather_check == False:
+            self.weather_check = True
             self.get_weather()
         if self.last_date != date:
             # Asign new daily chores
@@ -131,6 +137,10 @@ class Brain:
             self.reset_chores(True)
 
             self.last_date = date
+
+            # Reset daily variables
+            self.weather_check = False
+            self.rent_check = False
 
             self.bot.post("It's a new day!")
         if int(abs((date - self.last_week).days)) >= 7:
