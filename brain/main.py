@@ -164,15 +164,13 @@ class Brain:
             elif used_any(last_message, self.WEATHER_WORDS):
                 last_message = last_message.split()
                 last_message.remove('!housemate')
-                if last_message[1] == 'forecast' or last_message[1] == 'weather':
-                    last_message.remove(last_message[1])
-                try:
+                if last_message[0] == 'forecast' or last_message[0] == 'weather':
+                    last_message.remove(last_message[0])
+                if len(last_message) == 0:
+                    self.get_weather()
+                else:
                     if last_message[1] == 'tomorrow':
                         self.get_weather(not_tomorrow = False)
-                    else:
-                        self.get_weather()
-                except:
-                    self.get_weather()
             elif used_any(last_message, self.CHORES_WORDS):
                 msg_to_send = ""
                 for i in self.chores_assignment_daily:
