@@ -166,9 +166,12 @@ class Brain:
                 last_message.remove('!housemate')
                 if last_message[1] == 'forecast' or last_message[1] == 'weather':
                     last_message.remove(last_message[1])
-                if last_message[1] == 'tomorrow':
-                    self.get_weather(not_tomorrow = False)
-                else:
+                try:
+                    if last_message[1] == 'tomorrow':
+                        self.get_weather(not_tomorrow = False)
+                    else:
+                        self.get_weather()
+                except:
                     self.get_weather()
             elif used_any(last_message, self.CHORES_WORDS):
                 msg_to_send = ""
