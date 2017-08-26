@@ -26,9 +26,9 @@ class Brain:
     completed_chores_weekly = ['living_room_and_hall', 'bathroom', 'kitchen']
 
     # Stuff for fun
-    JOKES = ['What’s the difference between a G-spot and a golf ball? A guy will actually search for a golf ball.',
-             'Why was the guitar teacher arrested? For fingering a minor.',
-             'Why does Santa Claus have such a big sack? He only comes once a year.']
+    JOKES = ['A man is washing his car with his son when the boy goes \'Dad, can\'t we use a sponge?\'',
+             'Dads are like boomerangs. \n\n\nI hope',
+             'What\'s the difference between in-laws and outlaws? Outlaws are wanted.']
 
     SONG = ['https://www.youtube.com/watch?v=y6120QOlsfU',
             'https://www.youtube.com/watch?v=L_jWHffIx5E',
