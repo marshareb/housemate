@@ -14,10 +14,6 @@ class Brain:
     # People who live in the apartment
     people = ['james', 'chase', 'mike']
 
-    # Alarm
-    # Format: time:reason
-    alarms = {}
-
     # Assignment hashtable
     chores_assignment_daily = {'James': '', 'Chase': '', 'Mike': ''}
     chores_assignment_weekly = {'James': '', 'Chase': '', 'Mike': ''}
@@ -56,7 +52,6 @@ class Brain:
     TODO_WORDS = ['do', 'done']
     TRADE_WORDS = ['trade']
     WEATHER_WORDS = ['forecast', 'weather']
-    ALARM_WORDS = ['alarm']
 
     # Resets completed chores.
     def reset_chores(self, daily):
@@ -170,6 +165,7 @@ class Brain:
             message += self.alarms[time]
             self.bot.post(message)
 
+
     def process_message(self, last_message):
         # Check if any word lists were used.
         if '!housemate' in last_message:
@@ -186,16 +182,6 @@ class Brain:
             elif used_any(last_message, self.SONG_WORDS):
                 x = random.choice(self.SONG)
                 self.bot.post(x)
-            elif used_any(last_message, self.ALARM_WORDS):
-                last_message = last_message.split()
-                last_message.remove('!housemate')
-                last_message.remove('alarm')
-                if ':' in last_message[0]:
-                    try:
-                        self.alarms[last_message[0]] = last_message[1]
-                    except:
-                        self.bot.post("I don't understand your alarm. Try again with the format !housemate alarm time " +
-                                      "reason.")
             elif used_any(last_message, self.WEATHER_WORDS):
                 last_message = last_message.split()
                 last_message.remove('!housemate')
