@@ -127,7 +127,6 @@ class Brain:
         hour = obdate.time().hour
         minute = obdate.time().minute
         date = obdate.date()
-        time = str(int(hour)) + ":" + str(int(minute))
         if int(hour) == 10 and int(minute) == 30 and int(date.day) == 28 and self.rent_check == False:
             self.rent_check = True
             self.bot.post("Don't forget about rent!")
@@ -159,12 +158,6 @@ class Brain:
             self.last_week = date
 
             self.bot.post("Finished updating!")
-        if time in self.alarms:
-            message = ""
-            message += "Reminder: "
-            message += self.alarms[time]
-            self.bot.post(message)
-
 
     def process_message(self, last_message):
         # Check if any word lists were used.
