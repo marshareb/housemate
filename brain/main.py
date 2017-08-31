@@ -94,7 +94,7 @@ class Brain:
 
     def __init__(self, Bot, date, location):
         self.weather = weather.Weather()
-        self.location = self.weather.lookup_by_location(location)
+        self.location = location
         self.last_date = date
         self.last_week = date
         self.bot = Bot
@@ -103,16 +103,17 @@ class Brain:
         self.update_chores(False)
 
     def get_weather(self, not_tomorrow = True):
+        weather = self.weather.lookup_by_location(self.location)
         if not_tomorrow:
             # Get the forecast for today
-            forecast = self.location.forecast()[0]
+            forecast = weather.forecast()[0]
             message = ""
             message += ("The forecast for today is " + str(forecast['text']) + ". \n")
             message += ("The high for today is " + str(forecast['high']) + " and the low for today is " +
                           str(forecast['low']) + ".")
         else:
             # Get the forecast for tomorrow
-            forecast = self.location.forecast()[1]
+            forecast = weather.forecast()[1]
             message = ""
             message += ("The forecast for tomorrow is " + str(forecast['text'] + ". \n"))
             message += ("The high for tomorrow is " + str(forecast['high']) + " and the low for tomorrow is " +
