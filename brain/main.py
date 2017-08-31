@@ -14,6 +14,10 @@ class Brain:
     # People who live in the apartment
     people = ['james', 'chase', 'mike']
 
+    # Alarm
+    # Format: time:reason
+    alarms = {}
+
     # Assignment hashtable
     chores_assignment_daily = {'James': '', 'Chase': '', 'Mike': ''}
     chores_assignment_weekly = {'James': '', 'Chase': '', 'Mike': ''}
@@ -52,6 +56,7 @@ class Brain:
     TODO_WORDS = ['do', 'done']
     TRADE_WORDS = ['trade']
     WEATHER_WORDS = ['forecast', 'weather']
+    ALARM_WORDS = ['alarm']
 
     # Resets completed chores.
     def reset_chores(self, daily):
@@ -127,6 +132,7 @@ class Brain:
         hour = obdate.time().hour
         minute = obdate.time().minute
         date = obdate.date()
+        time = str(int(hour)) + ":" + str(int(minute))
         if int(hour) == 10 and int(minute) == 30 and int(date.day) == 28 and self.rent_check == False:
             self.rent_check = True
             self.bot.post("Don't forget about rent!")
@@ -158,6 +164,11 @@ class Brain:
             self.last_week = date
 
             self.bot.post("Finished updating!")
+        if time in self.alarms:
+            message = ""
+            message += "Reminder: "
+            message += self.alarms[time]
+            self.bot.post(message)
 
     def process_message(self, last_message):
         # Check if any word lists were used.
@@ -175,6 +186,16 @@ class Brain:
             elif used_any(last_message, self.SONG_WORDS):
                 x = random.choice(self.SONG)
                 self.bot.post(x)
+            elif used_any(last_message, self.ALARM_WORDS):
+                last_message = last_message.split()
+                last_message.remove('!housemate')
+                last_message.remove('alarm')
+                if ':' in last_message[0]:
+                    try:
+                        self.alarms[last_message[0]] = last_message[1]
+                    except:
+                        self.bot.post("I don't understand your alarm. Try again with the format !housemate alarm time " +
+                                      "reason.")
             elif used_any(last_message, self.WEATHER_WORDS):
                 last_message = last_message.split()
                 last_message.remove('!housemate')
