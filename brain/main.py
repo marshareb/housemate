@@ -103,7 +103,10 @@ class Brain:
         self.update_chores(False)
 
     def get_weather(self, not_tomorrow = True):
-        weather = self.weather.lookup_by_location(self.location)
+        try:
+            weather = self.weather.lookup_by_location(self.location)
+        except:
+            raise ValueError("Address file is empty")
         if not_tomorrow:
             # Get the forecast for today
             forecast = weather.forecast()[0]
