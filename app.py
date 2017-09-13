@@ -23,9 +23,10 @@ if __name__ == '__main__':
     index = 0
     groups = groupy.Group.list()
     for i in range(len(groups)):
-        if groups[i] == 'apartment':
+        print(i)
+        if str(groups[i]).split()[0] == 'apartment,':
             index = i
-
+            break
     group = groups[index]
 
     # Get members of the group.
@@ -49,7 +50,7 @@ if __name__ == '__main__':
 
     location = get_location()
 
-    brain = brain.Brain(bot, datetime.datetime.now().date(), location, members)
+    brain = brain.Brain(bot, datetime.datetime.now().date(), location, members, group)
 
     bot.post("Hello! I've been updated or the server has been reset.")
 
