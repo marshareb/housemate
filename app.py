@@ -18,14 +18,6 @@ def get_location():
 if __name__ == '__main__':
     # Get the appropriate variables
 
-    # Housemate here is the name of the bot that housemate will be using.
-    index = 0
-    bots = groupy.Bot.list()
-    for i in range(len(bots)):
-        if bots[i] == 'Housemate':
-            index = i
-
-    bot = bots[index]
 
     # apartment here is the name of the group you want Housemate to watch
     index = 0
@@ -36,13 +28,28 @@ if __name__ == '__main__':
 
     group = groups[index]
 
+    # Get members of the group.
+    members = group.members()
+
+    # Housemate here is the name of the bot that housemate will be using.
+    index = 0
+    bots = groupy.Bot.list()
+    try:
+        for i in range(len(bots)):
+            if bots[i] == 'Housemate':
+                index = i
+        bot = bots[index]
+    except:
+        bot = groupy.Bot.create('Housemate', group)
+        bot.post("I'm alive!")
+
     # Assign the two dates to check.
     last_date = datetime.datetime.now().date()
     last_week = datetime.datetime.now().date()
 
     location = get_location()
 
-    brain = brain.Brain(bot, datetime.datetime.now().date(), location)
+    brain = brain.Brain(bot, datetime.datetime.now().date(), location, members)
 
     bot.post("Hello! I've been updated or the server has been reset.")
 

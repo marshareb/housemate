@@ -1,5 +1,6 @@
 import random
 import weather
+import groupy
 
 # Used any function
 def used_any(text, word_list):
@@ -12,7 +13,7 @@ class Brain:
     chores_weekly = ['(Living Room and Hall)', '(Bathroom)', '(Kitchen)']
 
     # People who live in the apartment
-    people = ['james', 'chase', 'mike']
+    people = []
 
     # Assignment hashtable
     chores_assignment_daily = {'James': '', 'Chase': '', 'Mike': ''}
@@ -34,8 +35,9 @@ class Brain:
             'https://www.youtube.com/watch?v=L_jWHffIx5E',
             'https://www.youtube.com/watch?v=dQw4w9WgXcQ']
 
+    last_hour = False
     rent_check = False
-
+    reminder = False
     weather_check = False
 
 
@@ -52,6 +54,14 @@ class Brain:
     TODO_WORDS = ['do', 'done']
     TRADE_WORDS = ['trade']
     WEATHER_WORDS = ['forecast', 'weather']
+
+    # Mention is broke in groupy, so here's a fix.
+    def mention(self, person):
+        id = self.members[person]
+        x = 0
+        y = len(person)
+        z = groupy.attachments.Mentions([id],[[x,y]])
+        self.bot.post(person, z)
 
     # Resets completed chores.
     def reset_chores(self, daily):
@@ -92,8 +102,22 @@ class Brain:
             self.chores_assignment_weekly[person1] = chore2
             self.chores_assignment_weekly[person2] = chore1
 
-    def __init__(self, Bot, date, location):
+    def __init__(self, Bot, date, location, members):
         self.weather = weather.Weather()
+
+        for i in members:
+            self.people.append(i.nickname.lower())
+
+        self.members = {}
+        self.chores_assignment_daily = {}
+        self.chores_assignment_weekly = {}
+
+        # Get the user id and initialize things
+        for i in members:
+            self.members[i.nickname] = i.user_id
+            self.chores_assignment_daily[i.nickname] = ''
+            self.chores_assignment_weekly[i.nickname] = ''
+
         self.location = location
         self.last_date = date
         self.last_week = date
@@ -127,12 +151,40 @@ class Brain:
         hour = obdate.time().hour
         minute = obdate.time().minute
         date = obdate.date()
-        if int(hour) == 10 and int(minute) == 30 and int(date.day) == 28 and self.rent_check == False:
+        # init the last_hour variable.
+        if self.last_hour == False:
+            hour = obdate.time().hour
+        if int(hour) == 10 and int(minute) == 30 and int(date.day) == 20 and self.rent_check == False:
             self.rent_check = True
             self.bot.post("Don't forget about rent!")
-        if int(hour) == 8 and int(minute) == 30 and self.weather_check == False:
+        if int(hour) == 6 and int(minute) == 30 and self.weather_check == False:
             self.weather_check = True
             self.get_weather()
+
+        if self.last_hour != hour and self.reminder:
+            self.reminder = False
+
+        if int(hour) >= 7 and not self.reminder:
+            # Find which daily chores have been completed.
+            x = []
+            people_to_message = []
+            for i in self.completed_chores_daily:
+                if not self.completed_chores[i]:
+                    x.append(i)
+            for i in self.chores_assignment_daily:
+                if self.chores_assignment_daily[i] in x:
+                    people_to_message.append(i)
+            # Compose the message
+            msg = ""
+            msg += "Reminder: you still need to do "
+            for i in x:
+                msg += i
+                msg += " "
+            self.bot.post(msg)
+            for i in people_to_message:
+                self.mention(i)
+            self.reminder = True
+
         if self.last_date != date:
             # Asign new daily chores
             self.update_chores(True)
