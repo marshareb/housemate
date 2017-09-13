@@ -12,12 +12,7 @@ class Brain:
     chores_daily = ['(Dishes)', '(Trash)', '(General Cleanliness)']
     chores_weekly = ['(Living Room and Hall)', '(Bathroom)', '(Kitchen)']
 
-    # People who live in the apartment
-    people = []
-
-    # Assignment hashtable
-    chores_assignment_daily = {'James': '', 'Chase': '', 'Mike': ''}
-    chores_assignment_weekly = {'James': '', 'Chase': '', 'Mike': ''}
+    chores_hashtable = {'(Dishes)' : 'dishes', '(Trash)' : 'trash', '(General Cleanliness)' : 'general_cleanliness'}
 
     # Completed Chores hashtable
     completed_chores = {'dishes' : False, 'trash' : False, 'general_cleanliness' : False, 'living_room_and_hall' : False,
@@ -61,7 +56,7 @@ class Brain:
         x = 0
         y = len(person)
         z = groupy.attachments.Mentions([id],[[x,y]])
-        self.bot.post(person, z)
+        self.group.post('@' + person, z.as_dict())
 
     # Resets completed chores.
     def reset_chores(self, daily):
@@ -102,9 +97,10 @@ class Brain:
             self.chores_assignment_weekly[person1] = chore2
             self.chores_assignment_weekly[person2] = chore1
 
-    def __init__(self, Bot, date, location, members):
+    def __init__(self, Bot, date, location, members, group):
         self.weather = weather.Weather()
-
+        self.people = []
+        self.group = group
         for i in members:
             self.people.append(i.nickname.lower())
 
@@ -153,7 +149,8 @@ class Brain:
         date = obdate.date()
         # init the last_hour variable.
         if self.last_hour == False:
-            hour = obdate.time().hour
+            self.last_hour = obdate.time().hour
+
         if int(hour) == 10 and int(minute) == 30 and int(date.day) == 20 and self.rent_check == False:
             self.rent_check = True
             self.bot.post("Don't forget about rent!")
@@ -161,10 +158,11 @@ class Brain:
             self.weather_check = True
             self.get_weather()
 
-        if self.last_hour != hour and self.reminder:
+        if self.last_hour != hour and self.reminder == True:
             self.reminder = False
 
-        if int(hour) >= 7 and not self.reminder:
+        """
+        if int(hour) >= 7 and self.reminder == False:
             # Find which daily chores have been completed.
             x = []
             people_to_message = []
@@ -172,18 +170,22 @@ class Brain:
                 if not self.completed_chores[i]:
                     x.append(i)
             for i in self.chores_assignment_daily:
-                if self.chores_assignment_daily[i] in x:
+                if self.chores_hashtable[self.chores_assignment_daily[i]] in x:
                     people_to_message.append(i)
             # Compose the message
-            msg = ""
-            msg += "Reminder: you still need to do "
-            for i in x:
-                msg += i
-                msg += " "
-            self.bot.post(msg)
-            for i in people_to_message:
-                self.mention(i)
+            if x == []:
+                pass
+            else:
+                msg = ""
+                msg += "Reminder: you still need to do "
+                for i in x:
+                    msg += i
+                    msg += " "
+                self.bot.post(msg)
+                for i in people_to_message:
+                    self.mention(i)
             self.reminder = True
+        """
 
         if self.last_date != date:
             # Asign new daily chores
