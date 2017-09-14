@@ -164,7 +164,7 @@ class Brain:
                 msg += "Reminder: you still need to do "
                 for i in x:
                     msg += i
-                    msg += " "
+                    msg += "\n"
                 self.bot.post(msg)
             self.reminder = True
 
