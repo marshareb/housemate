@@ -158,11 +158,7 @@ class Brain:
             self.weather_check = True
             self.get_weather()
 
-        if self.last_hour != hour and self.reminder == True:
-            self.reminder = False
-
-        """
-        if int(hour) >= 7 and self.reminder == False:
+        if int(hour) >= 20 and self.reminder == False:
             # Find which daily chores have been completed.
             x = []
             people_to_message = []
@@ -185,11 +181,13 @@ class Brain:
                 for i in people_to_message:
                     self.mention(i)
             self.reminder = True
-        """
 
         if self.last_date != date:
             # Asign new daily chores
             self.update_chores(True)
+
+            # Reset reminder
+            self.reminder = False
 
             # Reset chores daily
             self.reset_chores(True)
