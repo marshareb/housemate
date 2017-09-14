@@ -50,14 +50,6 @@ class Brain:
     TRADE_WORDS = ['trade']
     WEATHER_WORDS = ['forecast', 'weather']
 
-    # Mention is broke in groupy, so here's a fix.
-    def mention(self, person):
-        id = self.members[person]
-        x = 0
-        y = len(person)
-        z = groupy.attachments.Mentions([id],[[x,y]])
-        self.group.post('@' + person, z.as_dict())
-
     # Resets completed chores.
     def reset_chores(self, daily):
         if daily == True:
@@ -161,13 +153,9 @@ class Brain:
         if int(hour) >= 20 and self.reminder == False:
             # Find which daily chores have been completed.
             x = []
-            people_to_message = []
             for i in self.completed_chores_daily:
                 if not self.completed_chores[i]:
                     x.append(i)
-            for i in self.chores_assignment_daily:
-                if self.chores_hashtable[self.chores_assignment_daily[i]] in x:
-                    people_to_message.append(i)
             # Compose the message
             if x == []:
                 pass
@@ -178,8 +166,6 @@ class Brain:
                     msg += i
                     msg += " "
                 self.bot.post(msg)
-                for i in people_to_message:
-                    self.mention(i)
             self.reminder = True
 
         if self.last_date != date:
@@ -198,7 +184,6 @@ class Brain:
             self.weather_check = False
             self.rent_check = False
 
-            self.bot.post("It's a new day!")
         if int(abs((date - self.last_week).days)) >= 7:
             # Assign new people to weekly chores
             self.update_chores(False)
