@@ -119,21 +119,24 @@ class Brain:
             weather = self.weather.lookup_by_location(self.location)
         except:
             raise ValueError("Address file is empty")
-        if not_tomorrow:
-            # Get the forecast for today
-            forecast = weather.forecast()[0]
-            message = ""
-            message += ("The forecast for today is " + str(forecast['text']) + ". \n")
-            message += ("The high for today is " + str(forecast['high']) + " and the low for today is " +
-                          str(forecast['low']) + ".")
-        else:
-            # Get the forecast for tomorrow
-            forecast = weather.forecast()[1]
-            message = ""
-            message += ("The forecast for tomorrow is " + str(forecast['text'] + ". \n"))
-            message += ("The high for tomorrow is " + str(forecast['high']) + " and the low for tomorrow is " +
-                                                                            str(forecast['low']) + ".")
-        self.bot.post(message)
+        try:        
+            if not_tomorrow:
+               # Get the forecast for today
+               forecast = weather.forecast()[0]
+               message = ""
+               message += ("The forecast for today is " + str(forecast['text']) + ". \n")
+               message += ("The high for today is " + str(forecast['high']) + " and the low for today is " +
+                             str(forecast['low']) + ".")
+            else:
+               # Get the forecast for tomorrow
+               forecast = weather.forecast()[1]
+               message = ""
+               message += ("The forecast for tomorrow is " + str(forecast['text'] + ". \n"))
+               message += ("The high for tomorrow is " + str(forecast['high']) + " and the low for tomorrow is " +
+                                                                               str(forecast['low']) + ".")
+         except:
+            message = "Unable to get weather. Try again later."        
+         self.bot.post(message)
 
     def check_date(self, obdate):
         hour = obdate.time().hour

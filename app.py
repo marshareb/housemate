@@ -64,6 +64,6 @@ if __name__ == '__main__':
             last_message = group.messages().newest.text
             brain.process_message(last_message.lower())
         except:
-            print("Server down. Will try again later.")
+            pass
 
         time.sleep(3)
