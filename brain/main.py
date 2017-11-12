@@ -134,9 +134,9 @@ class Brain:
                message += ("The forecast for tomorrow is " + str(forecast['text'] + ". \n"))
                message += ("The high for tomorrow is " + str(forecast['high']) + " and the low for tomorrow is " +
                                                                                str(forecast['low']) + ".")
-         except:
+        except:
             message = "Unable to get weather. Try again later."        
-         self.bot.post(message)
+        self.bot.post(message)
 
     def check_date(self, obdate):
         hour = obdate.time().hour
