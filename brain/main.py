@@ -79,7 +79,7 @@ class Brain:
                 temp.remove(x)
 
     def roll(self, die):
-        return random.randint(1, die)
+        return random.randint(1, int(die))
 
     def trade(self, person1, person2, time):
         if time == 'daily':
@@ -300,7 +300,7 @@ class Brain:
                 last_message.remove('!housemate')
                 last_message.remove('roll')
                 try:
-                    self.bot.post(self.roll(last_message[0]))
+                    self.bot.post("You rolled a " + str(self.roll(int(last_message[0]))))
                 except:
                     self.bot.post("Sorry, I don't understand.")
             else:

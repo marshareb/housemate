@@ -30,7 +30,7 @@ if __name__ == '__main__':
     group = groups[index]
 
     # Get members of the group.
-    members = group.members()
+    members = group.members()[0:3]
 
     # Housemate here is the name of the bot that housemate will be using.
     index = 0
