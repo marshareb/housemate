@@ -49,6 +49,7 @@ class Brain:
     TODO_WORDS = ['do', 'done']
     TRADE_WORDS = ['trade']
     WEATHER_WORDS = ['forecast', 'weather']
+    ROLL_WORDS = ['roll']
 
     # Resets completed chores.
     def reset_chores(self, daily):
@@ -76,6 +77,9 @@ class Brain:
                 x = random.choice(temp)
                 self.chores_assignment_weekly[i] = x
                 temp.remove(x)
+
+    def roll(self, die):
+        return random.randint(1, die)
 
     def trade(self, person1, person2, time):
         if time == 'daily':
@@ -291,5 +295,13 @@ class Brain:
                 self.bot.post(msg_to_send)
             elif used_any(last_message, self.HELP_WORDS):
                 self.bot.post("I\'m here to let you know what chores need to be done and when!")
+            elif used_any(last_message, self.ROLL_WORDS):
+                last_message = last_message.split()
+                last_message.remove('!housemate')
+                last_message.remove('roll')
+                try:
+                    self.bot.post(self.roll(last_message[0]))
+                except:
+                    self.bot.post("Sorry, I don't understand.")
             else:
                 self.bot.post("Sorry, I don't understand.")
