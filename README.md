@@ -20,7 +20,7 @@ and click Create a Bot. Give the bot the name 'Housemate' and whatever Avatar UR
 In the folder, create a text file called "address.txt", with the name of the city that the house is located in. This is so that
 Housemate can grab the weather information for your city.
 
-Finally, on line 15 in app.py change the name from 'apartment' to the name of your group. Run app.py on a dedicated computer or server, and you now have
+Finally, on line 15 in app.py change the name from 'Apartment' to the name of your group. Run app.py on a dedicated computer or server, and you now have
 a housemate bot!
 
 ## Why Housemate?
@@ -71,7 +71,7 @@ For example, if James and Mike wanted to trade their daily chores, one of them w
 
 ## Future Development
 
-I'd like to have Housemate be integrated to other features in order to have an easy way to create and manage a smart home
+I'd like to have Housemate be integrated with other features in order to have an easy way to create and manage a smart home
 from GroupMe.
 
 

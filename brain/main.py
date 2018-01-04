@@ -1,5 +1,15 @@
 import random
 import weather
+import groupy
+import urllib.request
+
+def get_currency(code):
+   # Get the appropriate url
+   url = 'https://finance.yahoo.com/quote/' + str(code) + 'USD=X/'
+   # Open url and convert page into a string
+   f = urllib.request.urlopen(url)
+   x = str(f.read()).split('<')
+   return float(x[236].split('>')[-1].replace(',',''))
 
 # Used any function
 def used_any(text, word_list):
@@ -11,12 +21,7 @@ class Brain:
     chores_daily = ['(Dishes)', '(Trash)', '(General Cleanliness)']
     chores_weekly = ['(Living Room and Hall)', '(Bathroom)', '(Kitchen)']
 
-    # People who live in the apartment
-    people = ['james', 'chase', 'mike']
-
-    # Assignment hashtable
-    chores_assignment_daily = {'James': '', 'Chase': '', 'Mike': ''}
-    chores_assignment_weekly = {'James': '', 'Chase': '', 'Mike': ''}
+    chores_hashtable = {'(Dishes)' : 'dishes', '(Trash)' : 'trash', '(General Cleanliness)' : 'general_cleanliness'}
 
     # Completed Chores hashtable
     completed_chores = {'dishes' : False, 'trash' : False, 'general_cleanliness' : False, 'living_room_and_hall' : False,
@@ -34,8 +39,9 @@ class Brain:
             'https://www.youtube.com/watch?v=L_jWHffIx5E',
             'https://www.youtube.com/watch?v=dQw4w9WgXcQ']
 
+    last_hour = False
     rent_check = False
-
+    reminder = False
     weather_check = False
 
 
@@ -52,6 +58,8 @@ class Brain:
     TODO_WORDS = ['do', 'done']
     TRADE_WORDS = ['trade']
     WEATHER_WORDS = ['forecast', 'weather']
+    ROLL_WORDS = ['roll']
+    CRYPTO_WORDS = ['price']
 
     # Resets completed chores.
     def reset_chores(self, daily):
@@ -80,6 +88,9 @@ class Brain:
                 self.chores_assignment_weekly[i] = x
                 temp.remove(x)
 
+    def roll(self, die):
+        return random.randint(1, int(die))
+
     def trade(self, person1, person2, time):
         if time == 'daily':
             chore1 = self.chores_assignment_daily[person1]
@@ -92,8 +103,23 @@ class Brain:
             self.chores_assignment_weekly[person1] = chore2
             self.chores_assignment_weekly[person2] = chore1
 
-    def __init__(self, Bot, date, location):
+    def __init__(self, Bot, date, location, members, group):
         self.weather = weather.Weather()
+        self.people = []
+        self.group = group
+        for i in members:
+            self.people.append(i.nickname.lower())
+
+        self.members = {}
+        self.chores_assignment_daily = {}
+        self.chores_assignment_weekly = {}
+
+        # Get the user id and initialize things
+        for i in members:
+            self.members[i.nickname] = i.user_id
+            self.chores_assignment_daily[i.nickname] = ''
+            self.chores_assignment_weekly[i.nickname] = ''
+
         self.location = location
         self.last_date = date
         self.last_week = date
@@ -107,35 +133,64 @@ class Brain:
             weather = self.weather.lookup_by_location(self.location)
         except:
             raise ValueError("Address file is empty")
-        if not_tomorrow:
-            # Get the forecast for today
-            forecast = weather.forecast()[0]
-            message = ""
-            message += ("The forecast for today is " + str(forecast['text']) + ". \n")
-            message += ("The high for today is " + str(forecast['high']) + " and the low for today is " +
-                          str(forecast['low']) + ".")
-        else:
-            # Get the forecast for tomorrow
-            forecast = weather.forecast()[1]
-            message = ""
-            message += ("The forecast for tomorrow is " + str(forecast['text'] + ". \n"))
-            message += ("The high for tomorrow is " + str(forecast['high']) + " and the low for tomorrow is " +
-                                                                            str(forecast['low']) + ".")
+        try:        
+            if not_tomorrow:
+               # Get the forecast for today
+               forecast = weather.forecast()[0]
+               message = ""
+               message += ("The forecast for today is " + str(forecast['text']) + ". \n")
+               message += ("The high for today is " + str(forecast['high']) + " and the low for today is " +
+                             str(forecast['low']) + ".")
+            else:
+               # Get the forecast for tomorrow
+               forecast = weather.forecast()[1]
+               message = ""
+               message += ("The forecast for tomorrow is " + str(forecast['text'] + ". \n"))
+               message += ("The high for tomorrow is " + str(forecast['high']) + " and the low for tomorrow is " +
+                                                                               str(forecast['low']) + ".")
+        except:
+            message = "Unable to get weather. Try again later."        
         self.bot.post(message)
 
     def check_date(self, obdate):
         hour = obdate.time().hour
         minute = obdate.time().minute
         date = obdate.date()
-        if int(hour) == 10 and int(minute) == 30 and int(date.day) == 28 and self.rent_check == False:
+        # init the last_hour variable.
+        if self.last_hour == False:
+            self.last_hour = obdate.time().hour
+
+        if int(hour) == 10 and int(minute) == 30 and int(date.day) == 20 and self.rent_check == False:
             self.rent_check = True
             self.bot.post("Don't forget about rent!")
-        if int(hour) == 8 and int(minute) == 30 and self.weather_check == False:
+        if int(hour) == 6 and int(minute) == 30 and self.weather_check == False:
             self.weather_check = True
             self.get_weather()
+
+        if int(hour) >= 20 and self.reminder == False:
+            # Find which daily chores have been completed.
+            x = []
+            for i in self.completed_chores_daily:
+                if not self.completed_chores[i]:
+                    x.append(i)
+            # Compose the message
+            if x == []:
+                pass
+            else:
+                msg = ""
+                msg += "Reminder: you still need to do "
+                for i in x:
+                    msg += i
+                    msg += "\n"
+                self.bot.post(msg)
+            self.reminder = True
+
         if self.last_date != date:
             # Asign new daily chores
             self.update_chores(True)
+
+            # Reset reminder
+            self.reminder = False
 
             # Reset chores daily
             self.reset_chores(True)
@@ -146,7 +201,6 @@ class Brain:
             self.weather_check = False
             self.rent_check = False
 
-            self.bot.post("It's a new day!")
         if int(abs((date - self.last_week).days)) >= 7:
             # Assign new people to weekly chores
             self.update_chores(False)
@@ -251,5 +305,21 @@ class Brain:
                 self.bot.post(msg_to_send)
             elif used_any(last_message, self.HELP_WORDS):
                 self.bot.post("I\'m here to let you know what chores need to be done and when!")
+            elif used_any(last_message, self.ROLL_WORDS):
+                last_message = last_message.split()
+                last_message.remove('!housemate')
+                last_message.remove('roll')
+                try:
+                    self.bot.post("You rolled a " + str(self.roll(int(last_message[0]))))
+                except:
+                    self.bot.post("Sorry, I don't understand.")
+            elif used_any(last_message, self.CRYPTO_WORDS):
+                last_message = last_message.split()
+                last_message.remove('!housemate')
+                last_message.remove('price')
+                try:
+                    self.bot.post("The price for " + str(last_message[0]) + " is " + str(get_currency(str(last_message[0]))))
+                except:
+                    self.bot.post("Sorry, I don't understand.")
             else:
                 self.bot.post("Sorry, I don't understand.")

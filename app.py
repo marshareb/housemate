@@ -18,23 +18,31 @@ def get_location():
 if __name__ == '__main__':
     # Get the appropriate variables
 
-    # Housemate here is the name of the bot that housemate will be using.
-    index = 0
-    bots = groupy.Bot.list()
-    for i in range(len(bots)):
-        if bots[i] == 'Housemate':
-            index = i
-
-    bot = bots[index]
 
     # apartment here is the name of the group you want Housemate to watch
     index = 0
     groups = groupy.Group.list()
     for i in range(len(groups)):
-        if groups[i] == 'apartment':
+        print(i)
+        if str(groups[i]).split()[0] == 'Apartment,':
             index = i
-
+            break
     group = groups[index]
+
+    # Get members of the group.
+    members = group.members()[0:3]
+
+    # Housemate here is the name of the bot that housemate will be using.
+    index = 0
+    bots = groupy.Bot.list()
+    try:
+        for i in range(len(bots)):
+            if bots[i] == 'Housemate':
+                index = i
+        bot = bots[index]
+    except:
+        bot = groupy.Bot.create('Housemate', group)
+        bot.post("I'm alive!")
 
     # Assign the two dates to check.
     last_date = datetime.datetime.now().date()
@@ -42,7 +50,7 @@ if __name__ == '__main__':
 
     location = get_location()
 
-    brain = brain.Brain(bot, datetime.datetime.now().date(), location)
+    brain = brain.Brain(bot, datetime.datetime.now().date(), location, members, group)
 
     bot.post("Hello! I've been updated or the server has been reset.")
 
@@ -56,6 +64,6 @@ if __name__ == '__main__':
             last_message = group.messages().newest.text
             brain.process_message(last_message.lower())
         except:
-            print("Server down. Will try again later.")
+            pass
 
         time.sleep(3)
