@@ -24,7 +24,7 @@ if __name__ == '__main__':
     groups = groupy.Group.list()
     for i in range(len(groups)):
         print(i)
-        if str(groups[i]).split()[0] == 'apartment,':
+        if str(groups[i]).split()[0] == 'Apartment,':
             index = i
             break
     group = groups[index]
