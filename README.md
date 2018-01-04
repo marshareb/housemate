@@ -71,7 +71,7 @@ For example, if James and Mike wanted to trade their daily chores, one of them w
 
 ## Future Development
 
-I'd like to have Housemate be integrated to other features in order to have an easy way to create and manage a smart home
+I'd like to have Housemate be integrated with other features in order to have an easy way to create and manage a smart home
 from GroupMe.
 
 
