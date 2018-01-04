@@ -11,13 +11,6 @@ def get_currency(code):
    x = str(f.read()).split('<')
    return float(x[236].split('>')[-1].replace(',',''))
 
-def get_stock(code):
-    url = 'https://finance.yahoo.com/quote/' + str(code) + '?p=' + str(code)
-    # Open url and convert page into a string
-    f = urllib.request.urlopen(url)
-    x = str(f.read()).split('<')
-    return float(x[292].split('>')[-1].replace(',', ''))
-
 # Used any function
 def used_any(text, word_list):
     return any(list(map(lambda x: x in text, word_list)))
@@ -66,8 +59,7 @@ class Brain:
     TRADE_WORDS = ['trade']
     WEATHER_WORDS = ['forecast', 'weather']
     ROLL_WORDS = ['roll']
-    CRYPTO_WORDS = ['crypto']
-    STOCK_WORDS = ['stock']
+    CRYPTO_WORDS = ['price']
 
     # Resets completed chores.
     def reset_chores(self, daily):
@@ -324,17 +316,9 @@ class Brain:
             elif used_any(last_message, self.CRYPTO_WORDS):
                 last_message = last_message.split()
                 last_message.remove('!housemate')
-                last_message.remove('crypto')
+                last_message.remove('price')
                 try:
                     self.bot.post("The price for " + str(last_message[0]) + " is " + str(get_currency(str(last_message[0]))))
-                except:
-                    self.bot.post("Sorry, I don't understand.")
-            elif used_any(last_message, self.STOCK_WORDS):
-                last_message = last_message.split()
-                last_message.remove('!housemate')
-                last_message.remove('stock')
-                try:
-                    self.bot.post("The price for " + str(last_message[0]) + " is " + str(get_stock(str(last_message[0]))))
                 except:
                     self.bot.post("Sorry, I don't understand.")
             else:
