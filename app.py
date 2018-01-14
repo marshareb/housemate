@@ -8,6 +8,7 @@ def process_message(message):
 
 def get_location():
     # Get the address from address.txt
+    # UPDATE: Also grabs Twitter keys
     f = open("address.txt", 'r')
     address = f.readline()
     f.close()

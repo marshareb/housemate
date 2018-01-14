@@ -2,6 +2,8 @@ import random
 import weather
 import groupy
 import urllib.request
+import tweepy
+
 
 def get_currency(code):
    # Get the appropriate url
@@ -60,6 +62,7 @@ class Brain:
     WEATHER_WORDS = ['forecast', 'weather']
     ROLL_WORDS = ['roll']
     CRYPTO_WORDS = ['price']
+    TWEET_WORDS = ['tweet']
 
     # Resets completed chores.
     def reset_chores(self, daily):
@@ -127,6 +130,9 @@ class Brain:
         # Initialize chores
         self.update_chores(True)
         self.update_chores(False)
+        auth = tweepy.OAuthHandler('', '')
+        auth.set_access_token('', '')
+        self.api = tweepy.API(auth)
 
     def get_weather(self, not_tomorrow = True):
         try:
@@ -321,5 +327,15 @@ class Brain:
                     self.bot.post("The price for " + str(last_message[0]) + " is " + str(get_currency(str(last_message[0]))))
                 except:
                     self.bot.post("Sorry, I don't understand.")
+            elif used_any(last_message, self.TWEET_WORDS):
+                last_message = last_message.split()
+                last_message.remove('!housemate')
+                last_message.remove('tweet')
+                try:
+                    tweet = ''.join(last_message)
+                    self.api.update_status(status=str(tweet))
+                    self.bot.post("You have posted: " + str(tweet))
+                except:
+                    self.bot.post("Sorry, I don't understand")
             else:
                 self.bot.post("Sorry, I don't understand.")
