@@ -11,13 +11,9 @@ def get_location():
     # UPDATE: Also grabs Twitter keys
     f = open("address.txt", 'r')
     address = f.readline()
-    cons_key = str(f.readline())
-    cons_key_sec = str(f.readline())
-    acc_key = str(f.readline())
-    acc_key_sec = str(f.readline())
     f.close()
 
-    return str(address), (cons_key, cons_key_sec, acc_key, acc_key_sec)
+    return str(address)
 
 
 if __name__ == '__main__':
@@ -53,9 +49,9 @@ if __name__ == '__main__':
     last_date = datetime.datetime.now().date()
     last_week = datetime.datetime.now().date()
 
-    location, k = get_location()
+    location = get_location()
 
-    brain = brain.Brain(bot, datetime.datetime.now().date(), location, members, group, k[0], k[1], k[2], k[3])
+    brain = brain.Brain(bot, datetime.datetime.now().date(), location, members, group)
 
     bot.post("Hello! I've been updated or the server has been reset.")
 

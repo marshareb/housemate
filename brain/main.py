@@ -131,8 +131,8 @@ class Brain:
         self.update_chores(True)
         self.update_chores(False)
         try:
-            auth = tweepy.OAuthHandler(cons_key, cons_sec_key)
-            auth.set_access_token(acc_tok, acc_tok_sec)
+            auth = tweepy.OAuthHandler('', '')
+            auth.set_access_token('', '')
             self.api = tweepy.API(auth)
         except:
             print("Failed to access twitter")
