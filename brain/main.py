@@ -339,6 +339,6 @@ class Brain:
                     self.api.update_status(status=str(tweet))
                     self.bot.post("You have posted: " + str(tweet))
                 except:
-                    self.bot.post("Sorry, I don't understand")
+                    self.bot.post("Twitter is having issues right now. Try again later")
             else:
                 self.bot.post("Sorry, I don't understand.")
