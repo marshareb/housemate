@@ -50,7 +50,6 @@ class Brain:
     # Key Words
     DATE_WORDS = ['date']
     UPDATE_WORDS = ['update']
-    GREETING_WORDS = ['hello', 'hi', 'what\'s up', 'sup']
     JOKE_WORDS = ['joke', 'jokes']
     HELP_WORDS = ['help']
     CHORES_WORDS = ['chores', 'chore']
@@ -230,8 +229,6 @@ class Brain:
                 self.bot.post('Updating...')
                 self.update_chores(True)
                 self.bot.post('Finished updating!')
-            elif used_any(last_message, self.GREETING_WORDS):
-                self.bot.post('Heyo')
             elif used_any(last_message, self.JOKE_WORDS):
                 x = random.choice(self.JOKES)
                 self.bot.post(x)
