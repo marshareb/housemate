@@ -106,7 +106,7 @@ class Brain:
             self.chores_assignment_weekly[person1] = chore2
             self.chores_assignment_weekly[person2] = chore1
 
-    def __init__(self, Bot, date, location, members, group):
+    def __init__(self, Bot, date, location, members, group, cons_key, cons_sec_key, acc_tok, acc_tok_sec):
         self.weather = weather.Weather()
         self.people = []
         self.group = group
@@ -130,9 +130,12 @@ class Brain:
         # Initialize chores
         self.update_chores(True)
         self.update_chores(False)
-        auth = tweepy.OAuthHandler('', '')
-        auth.set_access_token('', '')
-        self.api = tweepy.API(auth)
+        try:
+            auth = tweepy.OAuthHandler(cons_key, cons_sec_key)
+            auth.set_access_token(acc_tok, acc_tok_sec)
+            self.api = tweepy.API(auth)
+        except:
+            print("Failed to access twitter")
 
     def get_weather(self, not_tomorrow = True):
         try:
