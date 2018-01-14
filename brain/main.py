@@ -106,7 +106,7 @@ class Brain:
             self.chores_assignment_weekly[person1] = chore2
             self.chores_assignment_weekly[person2] = chore1
 
-    def __init__(self, Bot, date, location, members, group, cons_key, cons_sec_key, acc_tok, acc_tok_sec):
+    def __init__(self, Bot, date, location, members, group):
         self.weather = weather.Weather()
         self.people = []
         self.group = group
