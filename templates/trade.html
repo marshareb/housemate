@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block content %}
+  <div class="jumbo">
+    <h2>Trading</h2>
+        <p> How to trade: Write it in the format "name1 name2 timeframe", where name1 and name2 are the nicknames.</p>
+       <center>
+       <form action = "{{ url_for('trade') }}", method = "post">
+            <input type="text" name="input">
+        <input type="submit">
+</form>
+           </center>
+
+  </div>
+{% endblock %}

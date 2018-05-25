@@ -1,0 +1,2 @@
+{'James': '(Trash)', 'Drake White': '(General Cleanliness)'}
+{'James': '(Living Room and Hall)', 'Drake White': '(Kitchen)'}

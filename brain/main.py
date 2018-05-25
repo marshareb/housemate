@@ -106,7 +106,7 @@ class Brain:
             self.chores_assignment_weekly[person1] = chore2
             self.chores_assignment_weekly[person2] = chore1
 
-    def __init__(self, Bot, date, location, members, group, cons_key, cons_sec_key, acc_tok, acc_tok_sec):
+    def __init__(self, Bot, date, location, members, group):
         self.weather = weather.Weather()
         self.people = []
         self.group = group
@@ -230,8 +230,6 @@ class Brain:
                 self.bot.post('Updating...')
                 self.update_chores(True)
                 self.bot.post('Finished updating!')
-            elif used_any(last_message, self.GREETING_WORDS):
-                self.bot.post('Heyo')
             elif used_any(last_message, self.JOKE_WORDS):
                 x = random.choice(self.JOKES)
                 self.bot.post(x)
@@ -288,10 +286,20 @@ class Brain:
                 last_message = last_message.split()
                 last_message.remove('!housemate')
                 last_message.remove('trade')
+                print(last_message)
                 try:
-                    if last_message[2] == 'daily' or last_message[2] == 'weekly':
-                        if last_message[0] in self.people and last_message[1] in self.people:
-                            self.trade(last_message[0].title(), last_message[1].title(), last_message[2])
+                    time = last_message[-1]
+                    last_message.pop()
+                    last_message = ' '.join(last_message)
+                    print(last_message)
+                    persons = []
+                    for i in self.people:
+                        if i in last_message:
+                            persons.append(i)
+                    print(persons)
+                    if time == 'daily' or time == 'weekly':
+                        if len(persons) >= 2:
+                            self.trade(persons[0].title(), persons[1].title(), time)
                             self.bot.post("Trade complete.")
                         else:
                             self.bot.post("I don't understand the names. Try again")

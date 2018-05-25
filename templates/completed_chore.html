@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+{% block content %}
+  <div class="jumbo">
+    <h2>Complete Chores</h2>
+        <p> Write which chore was completed below.</p>
+       <center>
+       <form action = "{{ url_for('completed_chore') }}", method = "post">
+            <input type="text" name="input">
+        <input type="submit">
+</form>
+           </center>
+  </div>
+{% endblock %}

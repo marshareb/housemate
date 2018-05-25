@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>HouseMate App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+  </head>
+  <body>
+   
+    <header>
+      <div class="container">
+        <h1 class="logo">HouseMate App</h1>
+      </div>
+    </header>
+
+    <div class="container">
+      {% block content %}
+      {% endblock %}
+      <div class = 'navigation'>
+    <center><a href="home">Home </a></center>
+    <center>
+    <a href="update">
+        Update
+    </a>
+      </center>
+      <center><a href="chores">
+           Send Chores
+      </a>
+      </center>
+    <center> <a href ='trade'> Trade Chores </a></center>
+  <center>
+    <a href="completed_chore">
+      Completed Chores
+    </a>
+  </center>
+    <center>
+      <a href="todo">
+        To do list
+      </a>
+    </center>
+        </div>
+    </div>
+     
+  </body>
+</html>

@@ -1,0 +1,109 @@
+body {
+  background-image: url('http://southasianhealthsolution.org/wp-content/uploads/2015/09/rice.jpg');
+  margin: 0;
+  padding: 0;
+  font-family: Helvetica, Arial, sans-serif;
+  color: #444;
+}
+ 
+/*
+ * Create dark grey header with a white logo
+ */
+  
+header {
+  background-color: #2B2B2B;
+  height: 35px;
+  width: 100%;
+  opacity: .9;
+  margin-bottom: 10px;
+}
+ 
+header h1.logo {
+  margin: 0;
+  font-size: 1.7em;
+  color: #fff;
+  text-transform: uppercase;
+  float: left;
+}
+ 
+header h1.logo:hover {
+  color: #fff;
+  text-decoration: none;
+}
+ 
+/*
+ * Center the body content
+ */
+  
+.container {
+  width: 940px;
+  margin: 0 auto;
+}
+ 
+div.jumbo {
+  padding: 10px 0 30px 0;
+  background-color: #eeeeee;
+  -webkit-border-radius: 6px;
+     -moz-border-radius: 6px;
+          border-radius: 6px;
+}
+
+div.navigation {
+  padding: 10px 0 30px 0;
+  background-color: #eeeeee;
+  -webkit-border-radius: 6px;
+     -moz-border-radius: 6px;
+          border-radius: 6px;
+}
+
+div.button {
+  padding: 10px 0 30px 0;
+  background-color: #eeeeee;
+  -webkit-border-radius: 6px;
+     -moz-border-radius: 6px;
+          border-radius: 6px;
+  align: center;
+  float: center;
+}
+
+a:link, a:visited {
+    text-decoration: none;
+    font-family: Helvetica, Arial, sans-serif;
+    color: #6c6c6c;
+    text-transform: uppercase;
+}
+
+ 
+h2 {
+  font-size: 3em;
+  margin-top: 40px;
+  text-align: center;
+  letter-spacing: -2px;
+}
+ 
+h3 {
+  font-size: 1.7em;
+  font-weight: 100;
+  margin-top: 30px;
+  text-align: center;
+  letter-spacing: -1px;
+  color: #999;
+}
+
+p {
+  font-size: 1em;
+  font-weight: 100;
+  text-align: center;
+  letter-spacing: -1px;
+}
+
+input[type=text] {
+    background-color: #eeee;
+    border: 1px solid black;
+    border-wdith: 1px;
+}
+
+input[type=submit]{
+    border: 1px solid black;
+    border-wdith: 1px;
+}
